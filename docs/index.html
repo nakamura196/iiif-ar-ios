@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IIIF AR — View Cultural Heritage in Augmented Reality</title>
+<meta name="description" content="IIIF画像をARで実寸表示。歴史的な絵図や古地図を、現実空間に原寸大で配置して鑑賞できるiOSアプリ。">
+<link rel="icon" href="favicon.ico">
+<style>
+  :root {
+    --bg: #faf8f4;
+    --bg-alt: #f3efe8;
+    --text: #1b2540;
+    --muted: #5a6378;
+    --accent: #2563eb;
+    --accent-light: #dbeafe;
+    --card-bg: #fff;
+    --border: #e0ddd8;
+    --hero-bg: linear-gradient(160deg, #1b2540 0%, #2d3a5c 100%);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111827;
+      --bg-alt: #1a2234;
+      --text: #e8e8e8;
+      --muted: #94a3b8;
+      --accent: #60a5fa;
+      --accent-light: #1e3a5f;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --hero-bg: linear-gradient(160deg, #0f172a 0%, #1e293b 100%);
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Language toggle */
+  .lang-toggle {
+    position: fixed;
+    top: 16px;
+    right: 20px;
+    z-index: 100;
+  }
+  .lang-toggle a {
+    font-size: 0.85em;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    background: rgba(0,0,0,0.3);
+    padding: 4px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .lang-toggle a:hover { text-decoration: none; color: #fff; }
+  .en { display: none !important; }
+  body.show-en .en { display: inline !important; }
+  body.show-en .ja { display: none !important; }
+  body.show-en .en-block { display: block !important; }
+  body.show-en .ja-block { display: none !important; }
+  .en-block { display: none !important; }
+  .ja-block { display: block !important; }
+
+  /* Hero */
+  .hero {
+    background: var(--hero-bg);
+    color: #fff;
+    text-align: center;
+    padding: 100px 20px 80px;
+  }
+  .hero-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 26px;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .hero h1 {
+    font-size: 2.2em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    font-size: 1.2em;
+    font-weight: 500;
+    opacity: 0.95;
+    margin-bottom: 16px;
+  }
+  .hero .description {
+    font-size: 1em;
+    opacity: 0.75;
+    max-width: 560px;
+    margin: 0 auto 32px;
+  }
+  .hero-badges {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hero-badges a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-size: 0.95em;
+    font-weight: 600;
+    transition: transform 0.15s;
+  }
+  .hero-badges a:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-appstore {
+    background: #fff;
+    color: #1b2540;
+  }
+  .btn-github {
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  /* Section common */
+  section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 20px;
+  }
+  section h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .section-lead {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95em;
+    margin-bottom: 36px;
+  }
+
+  /* Features */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 560px) {
+    .features-grid { grid-template-columns: 1fr; }
+  }
+  .feature-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+  }
+  .feature-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--accent-light);
+    font-size: 1.4em;
+    margin-bottom: 14px;
+  }
+  .feature-card h3 {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .feature-card p {
+    font-size: 0.9em;
+    color: var(--muted);
+  }
+
+  /* How it works */
+  .how-section {
+    background: var(--bg-alt);
+    max-width: none;
+    padding: 60px 20px;
+  }
+  .how-section .how-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .steps {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  .step {
+    flex: 0 0 200px;
+    text-align: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 20px;
+    position: relative;
+  }
+  .step-icon {
+    font-size: 2em;
+    margin-bottom: 12px;
+  }
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+  }
+  .step h4 {
+    font-size: 1em;
+    margin-bottom: 6px;
+  }
+  .step p {
+    font-size: 0.85em;
+    color: var(--muted);
+  }
+  .step-arrow {
+    display: flex;
+    align-items: center;
+    font-size: 1.4em;
+    color: var(--muted);
+    flex: 0 0 auto;
+  }
+  @media (max-width: 700px) {
+    .step { flex: 0 0 100%; }
+    .step-arrow { display: none; }
+  }
+
+  /* Sample images */
+  .samples-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .sample-card {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    align-items: start;
+  }
+  @media (max-width: 560px) {
+    .sample-card {
+      grid-template-columns: 1fr;
+    }
+  }
+  .sample-thumb {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+    background: var(--bg-alt);
+  }
+  .sample-info h3 {
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .sample-meta {
+    font-size: 0.8em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .sample-info p {
+    font-size: 0.9em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .sample-detail {
+    font-size: 0.85em;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 8px;
+  }
+
+  /* Technology */
+  .tech-section {
+    background: var(--bg-alt);
+    max-width: none;
+    padding: 60px 20px;
+  }
+  .tech-section .tech-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .tech-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 560px) {
+    .tech-grid { grid-template-columns: 1fr; }
+  }
+  .tech-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .tech-card .tech-icon {
+    font-size: 1.6em;
+    margin-bottom: 8px;
+  }
+  .tech-card h4 {
+    font-size: 0.95em;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .tech-card p {
+    font-size: 0.8em;
+    color: var(--muted);
+  }
+
+  /* About */
+  .about-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+  }
+  .about-box p {
+    font-size: 0.95em;
+    color: var(--muted);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .about-box p + p {
+    margin-top: 12px;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    border-top: 1px solid var(--border);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  footer p {
+    font-size: 0.85em;
+    color: var(--muted);
+  }
+  footer a { color: var(--accent); }
+  footer .footer-links {
+    margin-bottom: 8px;
+  }
+  footer .footer-links a {
+    margin: 0 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="lang-toggle">
+  <a onclick="toggleLang()"><span class="ja">English</span><span class="en">日本語</span></a>
+</div>
+
+<!-- Hero -->
+<section class="hero" style="max-width:none;">
+  <img src="icon.png" alt="IIIF AR" class="hero-icon" onerror="this.style.display='none'">
+  <h1>IIIF AR</h1>
+  <p class="subtitle">
+    <span class="ja">文化遺産を、実寸のARで体験する</span>
+    <span class="en">Explore Cultural Heritage at Real Scale</span>
+  </p>
+  <p class="description">
+    <span class="ja">歴史的な絵図や古地図を、ARで現実空間に原寸大で配置。近づけば細部まで高精細に表示される、IIIF対応のiOSアプリです。</span>
+    <span class="en">Place historical maps and illustrations in your real space at their true physical size. Move closer to reveal high-resolution details through IIIF deep zoom. An iOS AR app for cultural heritage.</span>
+  </p>
+  <div class="hero-badges">
+    <a href="#" class="btn-appstore">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <span class="ja">App Store</span>
+      <span class="en">App Store</span>
+    </a>
+    <a href="https://github.com/nakamura196/ezu" class="btn-github">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+</section>
+
+<!-- Features -->
+<section>
+  <h2>
+    <span class="ja">特長</span>
+    <span class="en">Features</span>
+  </h2>
+  <p class="section-lead">
+    <span class="ja">IIIF画像を、かつてない方法で体験する</span>
+    <span class="en">Experience IIIF images like never before</span>
+  </p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">&#x1f4d0;</div>
+      <h3>
+        <span class="ja">原寸大でAR配置</span>
+        <span class="en">Real-Scale AR Placement</span>
+      </h3>
+      <p>
+        <span class="ja">歴史資料の実際の寸法をメタデータから取得し、現実空間に原寸大で配置します。畳一枚大の絵図もそのままのサイズで体験できます。</span>
+        <span class="en">Place historical materials at their true physical dimensions in your real space. Experience the actual size of maps that span over a meter.</span>
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#x1f50d;</div>
+      <h3>
+        <span class="ja">近づいて細部を鑑賞</span>
+        <span class="en">Deep Zoom: Move Closer to See More</span>
+      </h3>
+      <p>
+        <span class="ja">カメラを近づけると自動的に高解像度タイルを読み込み、筆致や文字の細部まで鮮明に表示します。IIIFのタイルシステムを活用した段階的なズームです。</span>
+        <span class="en">As you move the camera closer, high-resolution tiles load automatically, revealing brushstrokes and fine details. Progressive zoom powered by the IIIF tile system.</span>
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#x1f310;</div>
+      <h3>
+        <span class="ja">あらゆるIIIFエンドポイントに対応</span>
+        <span class="en">Works with Any IIIF Endpoint</span>
+      </h3>
+      <p>
+        <span class="ja">IIIF Image API 2.0に準拠したあらゆるサーバーの画像を表示可能。世界中のデジタルアーカイブの資料をARで鑑賞できます。</span>
+        <span class="en">Display images from any IIIF Image API 2.0 compliant server. Explore cultural heritage from digital archives worldwide in AR.</span>
+      </p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">&#x1f4cd;</div>
+      <h3>
+        <span class="ja">配置プレビューとコーナーマーカー</span>
+        <span class="en">Placement Preview with Corner Markers</span>
+      </h3>
+      <p>
+        <span class="ja">配置前にコーナーポールで実寸の範囲を確認。床面の平面検出で正確な位置に配置でき、不透明度の調整も可能です。</span>
+        <span class="en">Confirm the real-world extent with corner poles before placement. Accurate floor plane detection, with adjustable opacity.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="how-section">
+  <div class="how-inner">
+    <h2>
+      <span class="ja">使い方</span>
+      <span class="en">How It Works</span>
+    </h2>
+    <p class="section-lead">
+      <span class="ja">3ステップで、歴史資料をARに</span>
+      <span class="en">Three steps to bring history into your space</span>
+    </p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">&#x1f4f1;</div>
+        <div class="step-num">1</div>
+        <h4>
+          <span class="ja">選ぶ</span>
+          <span class="en">Select</span>
+        </h4>
+        <p>
+          <span class="ja">ギャラリーから歴史的な絵図を選択</span>
+          <span class="en">Choose a historical image from the gallery</span>
+        </p>
+      </div>
+      <div class="step-arrow">&#x2192;</div>
+      <div class="step">
+        <div class="step-icon">&#x1f446;</div>
+        <div class="step-num">2</div>
+        <h4>
+          <span class="ja">タップ</span>
+          <span class="en">Tap</span>
+        </h4>
+        <p>
+          <span class="ja">検出された床面をタップして配置</span>
+          <span class="en">Tap a detected floor surface to place</span>
+        </p>
+      </div>
+      <div class="step-arrow">&#x2192;</div>
+      <div class="step">
+        <div class="step-icon">&#x1f9ed;</div>
+        <div class="step-num">3</div>
+        <h4>
+          <span class="ja">探索</span>
+          <span class="en">Explore</span>
+        </h4>
+        <p>
+          <span class="ja">歩き回って細部まで鑑賞</span>
+          <span class="en">Walk around and discover every detail</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sample images -->
+<section>
+  <h2>
+    <span class="ja">収録画像</span>
+    <span class="en">Sample Images</span>
+  </h2>
+  <p class="section-lead">
+    <span class="ja">琉球・東アジアの歴史的絵図3点を収録</span>
+    <span class="en">Three historical maps of the Ryukyu Islands and East Asia</span>
+  </p>
+  <div class="samples-grid">
+
+    <div class="sample-card">
+      <img
+        src="https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2F6ac7a5b6-1a7a-4371-92fa-5b43e689ac52.tif/full/!400,400/0/default.jpg"
+        alt="海東諸国紀"
+        class="sample-thumb"
+        loading="lazy"
+      >
+      <div class="sample-info">
+        <h3>
+          <span class="ja">海東諸国紀</span>
+          <span class="en">Hait&#333; Shokokuki</span>
+        </h3>
+        <div class="sample-meta">32.6 x 21.2 cm &mdash; 4,474 x 3,918 px</div>
+        <p>
+          <span class="ja">東京大学史料編纂所所蔵。正徳7年（1512）善本。</span>
+          <span class="en">Historiographical Institute, University of Tokyo. Fine copy, 1512.</span>
+        </p>
+        <p class="sample-detail">
+          <span class="ja">朝鮮成宗2年（1471）に申叔舟が編纂した海東諸国（日本国・琉球国）の研究書です。冒頭の「海東諸国総図」は9点の絵図を合成した一図で、日本部分は行基図様式をベースとしています。</span>
+          <span class="en">A study of the Eastern Sea nations (Japan and Ryukyu) compiled by Shin Sukju in 1471. The opening composite map combines nine illustrations, with the Japanese portion based on the Gy&#333;ki map style.</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="sample-card">
+      <img
+        src="https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2Fsho.tif/full/!400,400/0/default.jpg"
+        alt="琉球国之図"
+        class="sample-thumb"
+        loading="lazy"
+      >
+      <div class="sample-info">
+        <h3>
+          <span class="ja">琉球国之図</span>
+          <span class="en">Map of the Ryukyu Kingdom</span>
+        </h3>
+        <div class="sample-meta">96.8 x 47.3 cm &mdash; 25,167 x 12,483 px</div>
+        <p>
+          <span class="ja">沖縄美ら島財団所蔵。嘉慶元年（1796年）製作。</span>
+          <span class="en">Churashima Foundation. Produced in 1796.</span>
+        </p>
+        <p class="sample-detail">
+          <span class="ja">嘉慶元年（1796年）に琉球独自の測量技術で作られた精密な絵図で、首里王府の命により測量家の高原景宅が製作したと考えられています。沖縄本島と周辺諸島を美しく塗り分けた芸術作品としての価値も備えた歴史史料です。</span>
+          <span class="en">A precision map created in 1796 using Ryukyuan surveying techniques, attributed to surveyor Takahara Keitaku under orders of the Shuri royal court. A historical document doubling as a work of art with beautifully colored districts and islands.</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="sample-card">
+      <img
+        src="https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2Fcbd4f3b8-e6ec-4c15-9ffc-79badb88127f.tif/full/!400,400/0/default.jpg"
+        alt="琉球国図"
+        class="sample-thumb"
+        loading="lazy"
+      >
+      <div class="sample-info">
+        <h3>
+          <span class="ja">琉球国図</span>
+          <span class="en">Map of Ryukyu</span>
+        </h3>
+        <div class="sample-meta">87.8 x 175.8 cm &mdash; 9,449 x 20,724 px</div>
+        <p>
+          <span class="ja">沖縄県立博物館・美術館所蔵。元禄9年（1696年）奉納。</span>
+          <span class="en">Okinawa Prefectural Museum &amp; Art Museum. Dedicated in 1696.</span>
+        </p>
+        <p class="sample-detail">
+          <span class="ja">縦175.8cm、横87.8cmにおよぶ掛幅の大型絵図です。元禄9年（1696）に大宰府天満宮に奉納されたもので、九州南部から沖縄本島を中心とする琉球の島々と航路が描かれています。ARで原寸大に配置すると、その圧倒的なスケールを体感できます。</span>
+          <span class="en">A large hanging scroll measuring 175.8 cm tall and 87.8 cm wide, dedicated to Dazaifu Tenmangu shrine in 1696. It depicts the Ryukyu Islands and sea routes from southern Kyushu to Okinawa. Experience its overwhelming scale when placed at real size in AR.</span>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Technology -->
+<section class="tech-section">
+  <div class="tech-inner">
+    <h2>
+      <span class="ja">利用技術</span>
+      <span class="en">Technology</span>
+    </h2>
+    <p class="section-lead">
+      <span class="ja">Appleの最新AR技術とIIIF標準規格</span>
+      <span class="en">Built on Apple's AR frameworks and the IIIF standard</span>
+    </p>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-icon">&#x1f4f1;</div>
+        <h4>ARKit</h4>
+        <p>
+          <span class="ja">平面検出・シーン再構築・人物オクルージョンに対応</span>
+          <span class="en">Plane detection, scene reconstruction, person occlusion</span>
+        </p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">&#x1f3a8;</div>
+        <h4>RealityKit</h4>
+        <p>
+          <span class="ja">高性能3Dレンダリングによるテクスチャ表示</span>
+          <span class="en">High-performance 3D rendering for texture display</span>
+        </p>
+      </div>
+      <div class="tech-card">
+        <div class="tech-icon">&#x1f5bc;</div>
+        <h4>IIIF Image API 2.0</h4>
+        <p>
+          <span class="ja">タイルベースの段階的高解像度画像配信</span>
+          <span class="en">Tile-based progressive high-resolution image delivery</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section>
+  <h2>
+    <span class="ja">このプロジェクトについて</span>
+    <span class="en">About</span>
+  </h2>
+  <div class="about-box">
+    <p>
+      <span class="ja">IIIF ARは、デジタルアーカイブの文化遺産資料を現実空間で体験するためのオープンソースプロジェクトです。IIIF（International Image Interoperability Framework）の画像配信標準を活用し、世界中のデジタルアーカイブが提供する高解像度画像をARで鑑賞できます。</span>
+      <span class="en">IIIF AR is an open-source project for experiencing cultural heritage materials from digital archives in your real space. It leverages the IIIF (International Image Interoperability Framework) standard to bring high-resolution images from digital archives worldwide into augmented reality.</span>
+    </p>
+    <p>
+      <span class="ja">ソースコードはGitHubで公開しています。フィードバックやコントリビューションを歓迎します。</span>
+      <span class="en">Source code is available on GitHub. Feedback and contributions are welcome.</span>
+    </p>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p class="footer-links">
+    <a href="https://github.com/nakamura196/ezu">GitHub</a>
+    <a href="#">App Store</a>
+    <a href="privacy-policy.html">
+      <span class="ja">プライバシーポリシー</span>
+      <span class="en">Privacy Policy</span>
+    </a>
+  </p>
+  <p>&copy; 2026 Satoru Nakamura</p>
+</footer>
+
+<script>
+function toggleLang() {
+  document.body.classList.toggle('show-en');
+}
+</script>
+
+</body>
+</html>

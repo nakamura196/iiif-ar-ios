@@ -1,0 +1,56 @@
+/* Settings */
+"settings_title" = "設定";
+"settings_done" = "完了";
+
+/* Settings - Display */
+"settings_display" = "表示";
+"settings_opacity" = "透明度";
+
+/* Settings - Debug */
+"settings_debug" = "デバッグ";
+"settings_corner_poles" = "コーナーポール";
+"settings_pole_height" = "ポール高さ";
+"settings_plane_detection" = "床面検出の可視化";
+"settings_show_image_info" = "画像情報の表示";
+
+/* Settings - Current Image */
+"settings_current_image" = "現在の画像";
+"label_name" = "名前";
+"label_pixels" = "ピクセル";
+"label_real_size" = "実寸";
+"label_cm_per_px_x" = "cm/px (横)";
+"label_cm_per_px_y" = "cm/px (縦)";
+
+/* Settings - Info */
+"settings_info" = "情報";
+"settings_version" = "バージョン";
+
+/* Content View - Status Messages */
+"status_loading_image" = "画像を取得中...";
+"status_detecting_plane" = "デバイスをゆっくり動かして床面を検出してください...";
+"status_tap_to_place" = "床面をタップして画像を配置";
+
+/* Content View - Toolbar */
+"toolbar_gallery" = "一覧";
+
+/* Gallery */
+"gallery_title" = "画像一覧";
+"gallery_close" = "閉じる";
+"gallery_place_ar" = "ARで配置";
+
+/* Image Detail - Technical Info */
+"detail_technical_info" = "技術情報";
+
+/* Size Labels */
+"size_small" = "小";
+"size_medium" = "中";
+"size_large" = "大";
+"size_extra_large" = "特大";
+
+/* IIIF Errors */
+"error_invalid_url" = "無効なURLです";
+"error_fetch_failed" = "画像の取得に失敗しました";
+"error_invalid_image" = "画像データが不正です";
+
+/* Dummy Image */
+"dummy_grid_label" = "グリッド: 10cm間隔";

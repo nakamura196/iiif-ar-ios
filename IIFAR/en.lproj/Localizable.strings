@@ -1,0 +1,56 @@
+/* Settings */
+"settings_title" = "Settings";
+"settings_done" = "Done";
+
+/* Settings - Display */
+"settings_display" = "Display";
+"settings_opacity" = "Opacity";
+
+/* Settings - Debug */
+"settings_debug" = "Debug";
+"settings_corner_poles" = "Corner Poles";
+"settings_pole_height" = "Pole Height";
+"settings_plane_detection" = "Plane Detection Overlay";
+"settings_show_image_info" = "Show Image Info";
+
+/* Settings - Current Image */
+"settings_current_image" = "Current Image";
+"label_name" = "Name";
+"label_pixels" = "Pixels";
+"label_real_size" = "Real Size";
+"label_cm_per_px_x" = "cm/px (W)";
+"label_cm_per_px_y" = "cm/px (H)";
+
+/* Settings - Info */
+"settings_info" = "Info";
+"settings_version" = "Version";
+
+/* Content View - Status Messages */
+"status_loading_image" = "Loading image...";
+"status_detecting_plane" = "Move your device slowly to detect a floor surface...";
+"status_tap_to_place" = "Tap the floor to place the image";
+
+/* Content View - Toolbar */
+"toolbar_gallery" = "Gallery";
+
+/* Gallery */
+"gallery_title" = "Images";
+"gallery_close" = "Close";
+"gallery_place_ar" = "Place in AR";
+
+/* Image Detail - Technical Info */
+"detail_technical_info" = "Technical Info";
+
+/* Size Labels */
+"size_small" = "S";
+"size_medium" = "M";
+"size_large" = "L";
+"size_extra_large" = "XL";
+
+/* IIIF Errors */
+"error_invalid_url" = "Invalid URL";
+"error_fetch_failed" = "Failed to fetch image";
+"error_invalid_image" = "Invalid image data";
+
+/* Dummy Image */
+"dummy_grid_label" = "Grid: 10 cm spacing";

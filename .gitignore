@@ -1,0 +1,32 @@
+# Xcode
+DerivedData/
+build/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# XcodeGen (regenerated from project.yml)
+*.xcodeproj
+
+# Analytics
+analytics/
+
+# API Keys
+*.p8
+.env
+
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Archives & builds
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CoreML generated
+*.mlmodelc
