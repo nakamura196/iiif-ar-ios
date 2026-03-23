@@ -3,101 +3,62 @@ import XCTest
 final class ScreenshotTests: XCTestCase {
 
     let app = XCUIApplication()
+    let outputDir = "/tmp/iifar_screenshots"
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+        try? FileManager.default.createDirectory(atPath: outputDir, withIntermediateDirectories: true)
         app.launch()
     }
 
-    /// Capture the gallery screen (image list)
-    func testCaptureGallery() throws {
-        // Gallery should appear on launch
-        sleep(3) // Wait for thumbnails to load
-
+    private func saveScreenshot(name: String) {
         let screenshot = XCUIScreen.main.screenshot()
-        let attachment = XCTAttachment(screenshot: screenshot)
-        attachment.name = "01_gallery"
-        attachment.lifetime = .keepAlways
-        add(attachment)
+        let path = "\(outputDir)/\(name).png"
+        try? screenshot.pngRepresentation.write(to: URL(fileURLWithPath: path))
     }
 
-    /// Capture the image detail screen
-    func testCaptureImageDetail() throws {
-        sleep(2)
+    func testCaptureGallery() throws {
+        sleep(5) // Wait for thumbnails
+        saveScreenshot(name: "01_gallery")
+    }
 
-        // Tap the first sample image in the list
+    func testCaptureImageDetail() throws {
+        sleep(3)
         let firstCell = app.cells.firstMatch
         if firstCell.waitForExistence(timeout: 5) {
             firstCell.tap()
-            sleep(1)
-
-            let screenshot = XCUIScreen.main.screenshot()
-            let attachment = XCTAttachment(screenshot: screenshot)
-            attachment.name = "02_image_detail"
-            attachment.lifetime = .keepAlways
-            add(attachment)
+            sleep(2)
+            saveScreenshot(name: "02_image_detail")
         }
     }
 
-    /// Capture the settings screen
     func testCaptureSettings() throws {
         sleep(2)
-
-        // Close the gallery sheet first
         let closeButton = app.buttons["閉じる"]
         if closeButton.waitForExistence(timeout: 3) {
             closeButton.tap()
             sleep(1)
         }
-
-        // Tap settings button
-        let settingsButton = app.buttons.matching(NSPredicate(format: "label CONTAINS 'gearshape' OR label CONTAINS '設定'")).firstMatch
-        if settingsButton.waitForExistence(timeout: 3) {
-            settingsButton.tap()
-            sleep(1)
-
-            let screenshot = XCUIScreen.main.screenshot()
-            let attachment = XCTAttachment(screenshot: screenshot)
-            attachment.name = "03_settings"
-            attachment.lifetime = .keepAlways
-            add(attachment)
+        // Find settings gear button
+        let buttons = app.buttons.allElementsBoundByIndex
+        for button in buttons {
+            if button.label.contains("gearshape") || button.label.contains("設定") {
+                button.tap()
+                sleep(1)
+                saveScreenshot(name: "03_settings")
+                return
+            }
         }
     }
 
-    /// Capture the AR view with camera (requires real device)
-    func testCaptureARView() throws {
-        sleep(2)
-
-        // Close gallery
-        let closeButton = app.buttons["閉じる"]
-        if closeButton.waitForExistence(timeout: 3) {
-            closeButton.tap()
-            sleep(2)
-        }
-
-        // The AR camera view should now be visible
-        let screenshot = XCUIScreen.main.screenshot()
-        let attachment = XCTAttachment(screenshot: screenshot)
-        attachment.name = "04_ar_camera"
-        attachment.lifetime = .keepAlways
-        add(attachment)
-    }
-
-    /// Capture Add Image screen
     func testCaptureAddImage() throws {
         sleep(2)
-
-        // Tap the + button in gallery
-        let addButton = app.buttons.matching(NSPredicate(format: "label CONTAINS 'plus' OR label CONTAINS '追加'")).firstMatch
+        // Tap + button in gallery toolbar
+        let addButton = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Add' OR label CONTAINS 'plus'")).firstMatch
         if addButton.waitForExistence(timeout: 3) {
             addButton.tap()
             sleep(1)
-
-            let screenshot = XCUIScreen.main.screenshot()
-            let attachment = XCTAttachment(screenshot: screenshot)
-            attachment.name = "05_add_image"
-            attachment.lifetime = .keepAlways
-            add(attachment)
+            saveScreenshot(name: "04_add_image")
         }
     }
 }
