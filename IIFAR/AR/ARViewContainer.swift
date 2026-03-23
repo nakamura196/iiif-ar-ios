@@ -1,6 +1,7 @@
 import SwiftUI
 import ARKit
 import RealityKit
+import Combine
 
 struct ARViewContainer: UIViewRepresentable {
     @ObservedObject var arManager: ARManager
@@ -24,6 +25,13 @@ struct ARViewContainer: UIViewRepresentable {
 
         context.coordinator.arView = arView
         arView.session.delegate = context.coordinator
+
+        // Use SceneEvents.Update for per-frame tile updates (more reliable than ARSessionDelegate)
+        context.coordinator.sceneUpdateSubscription = arView.scene.subscribe(
+            to: SceneEvents.Update.self
+        ) { [weak coordinator = context.coordinator] event in
+            coordinator?.onSceneUpdate()
+        }
 
         let tapGesture = UITapGestureRecognizer(
             target: context.coordinator,
@@ -71,6 +79,7 @@ struct ARViewContainer: UIViewRepresentable {
         private var showCustomPlanes = true
         private var cachedTexture: TextureResource?
         private var tileManager: TileManager?
+        var sceneUpdateSubscription: Cancellable?
         private var previewAnchor: AnchorEntity?
         private var previewCorners: [ModelEntity] = []
         private var previewEdges: [ModelEntity] = []
@@ -123,17 +132,14 @@ struct ARViewContainer: UIViewRepresentable {
         }
 
         func session(_ session: ARSession, didUpdate frame: ARFrame) {
+            // Handled by onSceneUpdate() via SceneEvents.Update
+        }
+
+        func onSceneUpdate() {
             guard let arView = arView else { return }
 
-            // Placement preview: show red corner markers before tap
-            if arManager.currentImage != nil && !arManager.isPlaced {
-                updatePlacementPreview(in: arView)
-            } else if previewAnchor != nil {
-                // Ensure preview is removed after placement
-                removePlacementPreview()
-            }
-
-            guard let tileManager = tileManager else { return }
+            guard let tileManager = tileManager,
+                  let frame = arView.session.currentFrame else { return }
 
             let cameraTransform = frame.camera.transform
             let viewportSize = arView.bounds.size
@@ -145,7 +151,6 @@ struct ARViewContainer: UIViewRepresentable {
                 zFar: 1000
             )
 
-            // Compute anchor world transform from contentContainer or imageAnchor
             let anchorTransform: simd_float4x4
             if let container = contentContainer {
                 anchorTransform = container.transformMatrix(relativeTo: nil)

@@ -9,14 +9,19 @@ class ARManager: ObservableObject {
     @Published var placedImageInfo: String?
     @Published var isLoading = false
     @Published var isPlaced = false
+    #if DEBUG
     @Published var opacity: Double = 0.7
-    @Published var poleHeight: Double = 1.0
-    @Published var imageRotation: Double = 0
-
-    // Debug settings
     @Published var showCornerPoles = true { didSet { onDebugSettingsChanged?() } }
     @Published var showPlaneDetection = true { didSet { onDebugSettingsChanged?() } }
     @Published var showImageInfo = true
+    #else
+    @Published var opacity: Double = 1.0
+    @Published var showCornerPoles = false { didSet { onDebugSettingsChanged?() } }
+    @Published var showPlaneDetection = false { didSet { onDebugSettingsChanged?() } }
+    @Published var showImageInfo = false
+    #endif
+    @Published var poleHeight: Double = 1.0
+    @Published var imageRotation: Double = 0
 
     // Tile debug info
     @Published var currentZoomLevel: Int = 0
@@ -34,6 +39,11 @@ class ARManager: ObservableObject {
     var onDebugSettingsChanged: (() -> Void)?
 
     func loadSample(_ sample: SampleImage) async {
+        // Clear previous image first
+        if currentImage != nil {
+            currentImage = nil
+            onImageUpdated?()
+        }
         isLoading = true
         isPlaced = false
         currentSample = sample

@@ -11,17 +11,11 @@ struct GalleryView: View {
             List {
                 ForEach(SampleImage.samples) { sample in
                     NavigationLink {
-                        ImageDetailView(sample: sample)
-                            .toolbar {
-                                ToolbarItem(placement: .confirmationAction) {
-                                    Button("ARで配置") {
-                                        isPresented = false
-                                        Task {
-                                            await arManager.loadSample(sample)
-                                        }
-                                    }
-                                }
-                            }
+                        ImageDetailView(
+                            sample: sample,
+                            arManager: arManager,
+                            isGalleryPresented: $isPresented
+                        )
                     } label: {
                         SampleRow(sample: sample, thumbnail: thumbnails[sample.id])
                     }

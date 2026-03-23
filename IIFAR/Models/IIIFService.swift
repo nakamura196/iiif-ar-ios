@@ -85,6 +85,20 @@ actor IIIFService {
 
     /// Fetch a thumbnail (small) for preview. Falls back to dummy.
     func fetchThumbnail(from sample: SampleImage) async -> UIImage {
+        // For Level 0 servers, use the thumbnail URL with pre-computed sizes
+        if let thumbURL = sample.iiifThumbnailURL() {
+            let key = cacheKey(sampleID: sample.id, maxDimension: 400)
+            if let cached = cachedImage(for: key) { return cached }
+            do {
+                let (data, response) = try await session.data(from: thumbURL)
+                if let httpResponse = response as? HTTPURLResponse,
+                   (200..<300).contains(httpResponse.statusCode),
+                   let image = UIImage(data: data) {
+                    storeImage(image, for: key)
+                    return image
+                }
+            } catch {}
+        }
         do {
             return try await fetchImage(from: sample, maxDimension: 400)
         } catch {

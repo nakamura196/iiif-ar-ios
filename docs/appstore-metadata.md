@@ -104,7 +104,7 @@ https://github.com/nakamura196/iiif-ar-ios/issues
 ## マーケティングURL（アプリ紹介ページ）
 
 ```
-TODO: ランディングページを作成後にURLを設定する
+https://nakamura196.github.io/iiif-ar-ios/
 ```
 
 ## プライバシーポリシーURL

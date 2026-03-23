@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ImageDetailView: View {
     let sample: SampleImage
+    @ObservedObject var arManager: ARManager
+    @Binding var isGalleryPresented: Bool
     @State private var image: UIImage?
     @State private var isLoading = true
 
@@ -19,6 +21,22 @@ struct ImageDetailView: View {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     }
+                }
+
+                // AR placement button - prominent
+                Button {
+                    isGalleryPresented = false
+                    Task {
+                        await arManager.loadSample(sample)
+                    }
+                } label: {
+                    Label("ARで配置", systemImage: "arkit")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
                 }
 
                 // Size badge
@@ -41,15 +59,14 @@ struct ImageDetailView: View {
                     .font(.body)
 
                 // Technical info
-                Section {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("技術情報")
+                        .font(.headline)
+                        .padding(.top, 8)
                     InfoRow(label: "ピクセル", value: "\(sample.pixelWidth)×\(sample.pixelHeight)")
                     InfoRow(label: "実寸", value: sample.sizeDescription)
                     InfoRow(label: "cm/px (横)", value: String(format: "%.4f", sample.cmPerPixelX))
                     InfoRow(label: "cm/px (縦)", value: String(format: "%.4f", sample.cmPerPixelY))
-                } header: {
-                    Text("技術情報")
-                        .font(.headline)
-                        .padding(.top, 8)
                 }
             }
             .padding()
@@ -68,7 +85,6 @@ struct ImageDetailView: View {
         case "小": return .green
         case "中": return .orange
         case "大": return .red
-        case "特大": return .purple
         default: return .gray
         }
     }

@@ -37,23 +37,40 @@ actor TileFetcher {
 
         let region = grid.iiifRegion(for: key)
         let size = grid.iiifSize(for: key)
-        let urlString = "\(baseURL)/\(region.x),\(region.y),\(region.w),\(region.h)/\(size.w),\(size.h)/0/default.jpg"
+        // Use "w," format (width only) for broader IIIF Level 0 server compatibility
+        let urlString = "\(baseURL)/\(region.x),\(region.y),\(region.w),\(region.h)/\(size.w),/0/default.jpg"
 
-        guard let url = URL(string: urlString) else { return nil }
+        guard let url = URL(string: urlString) else {
+            print("[TileFetcher] Invalid URL: \(urlString)")
+            return nil
+        }
+
+        print("[TileFetcher] Fetching sf=\(key.scaleFactor) tile(\(key.tileX),\(key.tileY)) URL: \(urlString)")
 
         do {
             let (data, response) = try await session.data(from: url)
-            guard let httpResp = response as? HTTPURLResponse,
-                  (200..<300).contains(httpResp.statusCode) else { return nil }
+            guard let httpResp = response as? HTTPURLResponse else {
+                print("[TileFetcher] No HTTP response")
+                return nil
+            }
+            guard (200..<300).contains(httpResp.statusCode) else {
+                print("[TileFetcher] HTTP \(httpResp.statusCode) for \(urlString)")
+                return nil
+            }
             guard let uiImage = UIImage(data: data),
-                  let cgImage = uiImage.cgImage else { return nil }
+                  let cgImage = uiImage.cgImage else {
+                print("[TileFetcher] Invalid image data (\(data.count) bytes)")
+                return nil
+            }
 
             let texture = try TextureResource.generate(
                 from: cgImage,
                 options: .init(semantic: .color)
             )
+            print("[TileFetcher] OK sf=\(key.scaleFactor) tile(\(key.tileX),\(key.tileY)) \(data.count) bytes")
             return texture
         } catch {
+            print("[TileFetcher] Error: \(error.localizedDescription)")
             return nil
         }
     }

@@ -32,10 +32,11 @@ final class TileManager {
         self.imageWidthMeters = Float(sample.realWidthMeters)
         self.imageHeightMeters = Float(sample.realHeightMeters)
 
-        let factors = [1, 2, 4, 8, 16, 32, 64, 128]
+        let factors = sample.scaleFactors
         self.grid = TileGrid(
             imageWidth: sample.pixelWidth,
             imageHeight: sample.pixelHeight,
+            tileSize: sample.tileSize,
             scaleFactors: factors
         )
         self.zoomMapper = ZoomLevelMapper(scaleFactors: factors)
@@ -78,6 +79,11 @@ final class TileManager {
         )
 
         arManager?.visibleTileCount = visible.count
+
+        // Debug log (throttled - only when sf changes or first time)
+        if sf != currentScaleFactor || tileEntities.isEmpty {
+            print("[TileManager] dist=\(String(format:"%.2f",distance))m sf=\(sf) visible=\(visible.count) cached=\(tileEntities.count) grid=\(grid.columns(at: sf))x\(grid.rows(at: sf))")
+        }
 
         // For cached tiles, create entity on demand (no transparent placeholders)
         var loadedCount = 0
