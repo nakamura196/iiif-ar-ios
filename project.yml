@@ -26,11 +26,29 @@ targets:
         CODE_SIGN_STYLE: "Automatic"
         TARGETED_DEVICE_FAMILY: "1,2"
 
+  IIFARUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: IIFARUITests
+    dependencies:
+      - target: IIFAR
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nakamura196.iifar.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        DEVELOPMENT_TEAM: "Q6S8JS6GWV"
+        CODE_SIGN_STYLE: "Automatic"
+
 schemes:
   IIFAR:
     build:
       targets:
         IIFAR: all
+        IIFARUITests: [test]
     run:
       config: Debug
       storeKitConfiguration: IIFAR/TipJar.storekit
+    test:
+      targets:
+        - IIFARUITests
