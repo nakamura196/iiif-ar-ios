@@ -24,7 +24,7 @@ struct CameraPermissionView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
 
-                Button("カメラを許可") {
+                Button("次へ") {
                     AVCaptureDevice.requestAccess(for: .video) { granted in
                         DispatchQueue.main.async {
                             if granted {
