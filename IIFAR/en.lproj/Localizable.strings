@@ -85,3 +85,11 @@
 "pocket_error_http" = "Communication error (code: %d)";
 "pocket_error_decoding" = "Failed to load data";
 "pocket_error_network" = "No network connection. Please check your connection";
+
+/* Detail metadata */
+"detail_metadata" = "Information";
+"label_attribution" = "Attribution";
+"label_rights" = "License";
+"label_real_size" = "Physical size";
+"label_pixels" = "Pixels";
+"detail_technical_info" = "Technical info";

@@ -34,4 +34,7 @@ struct IIIFManifest: Sendable {
     let iiifServiceURL: String
     let realWidthCm: Double
     let realHeightCm: Double
+    let attribution: String?
+    let rights: String?
+    let metadata: [(label: String, value: String)]
 }

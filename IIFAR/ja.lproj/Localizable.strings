@@ -85,3 +85,11 @@
 "pocket_error_http" = "通信エラーが発生しました（コード: %d）";
 "pocket_error_decoding" = "データの読み込みに失敗しました";
 "pocket_error_network" = "ネットワークに接続できません。接続を確認してください";
+
+/* Detail metadata */
+"detail_metadata" = "情報";
+"label_attribution" = "帰属";
+"label_rights" = "ライセンス";
+"label_real_size" = "実寸";
+"label_pixels" = "ピクセル";
+"detail_technical_info" = "技術情報";

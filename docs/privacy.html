@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IIIF AR プライバシーポリシー</title>
+<title>IIIF AR Privacy Policy</title>
 <style>
   body { font-family: -apple-system, sans-serif; max-width: 720px; margin: 0 auto; padding: 20px; line-height: 1.8; color: #333; }
   h1 { font-size: 1.5em; border-bottom: 1px solid #ccc; padding-bottom: 8px; }
@@ -13,6 +13,9 @@
   .lang-toggle a { color: #007aff; text-decoration: none; font-size: 0.95em; }
   .lang-toggle a:hover { text-decoration: underline; }
   .section-en { display: none; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+  th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 0.9em; }
+  th { background: #f5f5f5; }
 </style>
 <script>
 function toggleLang() {
@@ -42,38 +45,65 @@ function toggleLang() {
 <div id="section-ja">
 
 <h1>IIIF AR プライバシーポリシー</h1>
-<p class="date">最終更新日: 2026年3月23日</p>
+<p class="date">最終更新日: 2026年3月27日</p>
 
 <h2>1. はじめに</h2>
 <p>IIIF AR（以下「本アプリ」）は、IIIF対応の歴史的絵図・古地図をAR（拡張現実）で実寸表示するiOSアプリケーションです。本プライバシーポリシーは、本アプリにおける情報の取り扱いについて説明します。</p>
 
-<h2>2. データの収集について</h2>
-<p><strong>本アプリは、ユーザーの個人情報を一切収集・送信しません。</strong></p>
-<p>本アプリは以下のデバイス機能にアクセスしますが、個人情報の収集は行いません。</p>
+<h2>2. 収集するデータ</h2>
+<p>本アプリは、以下のデータを収集・利用します。</p>
+
+<h3>2.1 アカウント情報（任意）</h3>
+<p>Googleアカウントでログインした場合、以下の情報がFirebase Authenticationを通じて収集されます。</p>
 <ul>
-  <li><strong>カメラ</strong>: AR（拡張現実）表示のためにカメラにアクセスします。カメラ映像はAR空間のレンダリングのみに使用され、録画・保存・送信されることはありません。</li>
-  <li><strong>ネットワーク</strong>: IIIF Image APIから画像データをダウンロードするためにネットワーク通信を行います。通信先はユーザーが指定したIIIFサーバーのみであり、個人情報を含むデータの送信は行いません。</li>
+  <li>メールアドレス</li>
+  <li>表示名</li>
+  <li>プロフィール画像URL</li>
+</ul>
+<p>これらはアカウント認証およびコレクション機能の提供のみに使用されます。ログインは任意であり、ゲストモードではアカウント情報の収集は行いません。</p>
+
+<h3>2.2 利用状況データ</h3>
+<p>本アプリはFirebase Analyticsを使用して、匿名化された利用状況データを収集します。</p>
+<ul>
+  <li>画像選択、AR配置などの操作イベント</li>
+  <li>アプリの使用頻度</li>
+  <li>デバイスの種類、OSバージョン</li>
 </ul>
 
-<h2>3. データの処理について</h2>
-<p>AR処理はすべてデバイス上のARKitフレームワークによって実行されます。カメラ映像やAR空間のデータが外部サーバーに送信されることはありません。</p>
+<h3>2.3 クラッシュレポート</h3>
+<p>Firebase Crashlyticsを使用して、アプリのクラッシュ情報を収集します。これにはデバイス情報、アプリの状態、スタックトレースが含まれます。個人を特定する情報は含みません。</p>
 
-<h2>4. データの保存について</h2>
-<p>本アプリは、IIIF画像のURLや表示設定をデバイスのローカルストレージに保存する場合があります。これらはアプリの機能提供のみに使用され、個人を特定する情報は含みません。</p>
+<h3>2.4 パフォーマンスデータ</h3>
+<p>Firebase Performanceを使用して、画像読み込み時間やネットワークリクエストのパフォーマンスデータを収集します。</p>
 
-<h2>5. 第三者への提供</h2>
-<p>本アプリはユーザーの個人データを収集しないため、第三者への提供は一切ありません。</p>
+<h2>3. デバイス機能へのアクセス</h2>
+<ul>
+  <li><strong>カメラ</strong>: AR表示のためにカメラにアクセスします。カメラ映像はAR空間のレンダリングのみに使用され、録画・保存・送信されることはありません。</li>
+  <li><strong>ネットワーク</strong>: IIIF Image APIから画像データをダウンロードするため、およびFirebaseサービスとの通信に使用します。</li>
+</ul>
 
-<h2>6. 第三者サービス</h2>
-<p>本アプリは外部の分析ツール、広告SDK、トラッキングサービスを一切使用していません。</p>
+<h2>4. 第三者サービス</h2>
+<p>本アプリは以下の第三者サービスを使用しています。</p>
+<table>
+  <tr><th>サービス</th><th>提供元</th><th>目的</th></tr>
+  <tr><td>Firebase Authentication</td><td>Google LLC</td><td>ユーザー認証</td></tr>
+  <tr><td>Firebase Analytics</td><td>Google LLC</td><td>利用状況の分析</td></tr>
+  <tr><td>Firebase Crashlytics</td><td>Google LLC</td><td>クラッシュレポート</td></tr>
+  <tr><td>Firebase Performance</td><td>Google LLC</td><td>パフォーマンス監視</td></tr>
+  <tr><td>Google Sign-In</td><td>Google LLC</td><td>Googleアカウント認証</td></tr>
+</table>
+<p>これらのサービスのプライバシーポリシーについては、<a href="https://firebase.google.com/support/privacy">Firebase プライバシーページ</a>をご参照ください。</p>
 
-<h2>7. お子様のプライバシー</h2>
+<h2>5. データの保存と第三者への提供</h2>
+<p>収集されたデータはFirebase（Google Cloud Platform）のサーバーに保存されます。個人を特定する情報を第三者に販売・共有することはありません。</p>
+
+<h2>6. お子様のプライバシー</h2>
 <p>本アプリは特定の年齢層を対象としたものではなく、意図的にお子様の個人情報を収集することはありません。</p>
 
-<h2>8. ポリシーの変更</h2>
+<h2>7. ポリシーの変更</h2>
 <p>本プライバシーポリシーは、必要に応じて更新される場合があります。重要な変更がある場合は、アプリの更新情報にてお知らせします。</p>
 
-<h2>9. お問い合わせ</h2>
+<h2>8. お問い合わせ</h2>
 <p>本プライバシーポリシーに関するご質問は、以下までご連絡ください。</p>
 <p>開発者: Satoru Nakamura<br>
 GitHub: <a href="https://github.com/nakamura196/iiif-ar-ios/issues">https://github.com/nakamura196/iiif-ar-ios/issues</a></p>
@@ -83,38 +113,65 @@ GitHub: <a href="https://github.com/nakamura196/iiif-ar-ios/issues">https://gith
 <div id="section-en" class="section-en">
 
 <h1 lang="en">IIIF AR Privacy Policy</h1>
-<p class="date">Last updated: March 23, 2026</p>
+<p class="date">Last updated: March 27, 2026</p>
 
 <h2>1. Introduction</h2>
 <p>IIIF AR ("the App") is an iOS application that displays IIIF-compatible historical maps and illustrations in augmented reality at actual scale. This privacy policy explains how the App handles information.</p>
 
-<h2>2. Data Collection</h2>
-<p><strong>The App does not collect or transmit any personal information.</strong></p>
-<p>The App accesses the following device features, but does not collect personal information:</p>
+<h2>2. Data We Collect</h2>
+<p>The App collects and uses the following data.</p>
+
+<h3>2.1 Account Information (Optional)</h3>
+<p>When you sign in with a Google account, the following information is collected via Firebase Authentication:</p>
 <ul>
-  <li><strong>Camera</strong>: Used for augmented reality (AR) display. Camera feed is used solely for AR rendering and is never recorded, stored, or transmitted.</li>
-  <li><strong>Network</strong>: Used to download image data from IIIF Image API servers. Network requests are made only to IIIF servers specified by the user. No personal data is transmitted.</li>
+  <li>Email address</li>
+  <li>Display name</li>
+  <li>Profile photo URL</li>
+</ul>
+<p>This information is used solely for authentication and collection features. Sign-in is optional; in guest mode, no account information is collected.</p>
+
+<h3>2.2 Usage Data</h3>
+<p>The App uses Firebase Analytics to collect anonymized usage data:</p>
+<ul>
+  <li>Interaction events such as image selection and AR placement</li>
+  <li>App usage frequency</li>
+  <li>Device type and OS version</li>
 </ul>
 
-<h2>3. Data Processing</h2>
-<p>All AR processing is performed on-device using Apple's ARKit framework. Camera feed and AR spatial data are never sent to external servers.</p>
+<h3>2.3 Crash Reports</h3>
+<p>Firebase Crashlytics collects crash data including device information, app state, and stack traces. No personally identifiable information is included.</p>
 
-<h2>4. Data Storage</h2>
-<p>The App may store IIIF image URLs and display settings in local storage on the device. These are used solely for app functionality and do not contain personally identifiable information.</p>
+<h3>2.4 Performance Data</h3>
+<p>Firebase Performance collects data on image load times and network request performance.</p>
 
-<h2>5. Third-Party Sharing</h2>
-<p>Since the App does not collect personal user data, no data is shared with third parties.</p>
+<h2>3. Device Access</h2>
+<ul>
+  <li><strong>Camera</strong>: Used for AR display. Camera feed is used solely for AR rendering and is never recorded, stored, or transmitted.</li>
+  <li><strong>Network</strong>: Used to download images from IIIF servers and communicate with Firebase services.</li>
+</ul>
 
-<h2>6. Third-Party Services</h2>
-<p>The App does not use any external analytics, advertising SDKs, or tracking services.</p>
+<h2>4. Third-Party Services</h2>
+<p>The App uses the following third-party services:</p>
+<table>
+  <tr><th>Service</th><th>Provider</th><th>Purpose</th></tr>
+  <tr><td>Firebase Authentication</td><td>Google LLC</td><td>User authentication</td></tr>
+  <tr><td>Firebase Analytics</td><td>Google LLC</td><td>Usage analytics</td></tr>
+  <tr><td>Firebase Crashlytics</td><td>Google LLC</td><td>Crash reporting</td></tr>
+  <tr><td>Firebase Performance</td><td>Google LLC</td><td>Performance monitoring</td></tr>
+  <tr><td>Google Sign-In</td><td>Google LLC</td><td>Google account authentication</td></tr>
+</table>
+<p>For privacy policies of these services, see the <a href="https://firebase.google.com/support/privacy">Firebase Privacy page</a>.</p>
 
-<h2>7. Children's Privacy</h2>
+<h2>5. Data Storage and Third-Party Sharing</h2>
+<p>Collected data is stored on Firebase (Google Cloud Platform) servers. We do not sell or share personally identifiable information with third parties.</p>
+
+<h2>6. Children's Privacy</h2>
 <p>The App is not directed at any specific age group and does not intentionally collect personal information from children.</p>
 
-<h2>8. Changes to This Policy</h2>
+<h2>7. Changes to This Policy</h2>
 <p>This privacy policy may be updated as needed. Significant changes will be communicated through app update notes.</p>
 
-<h2>9. Contact</h2>
+<h2>8. Contact</h2>
 <p>For questions about this privacy policy, please contact:<br>
 Developer: Satoru Nakamura<br>
 GitHub: <a href="https://github.com/nakamura196/iiif-ar-ios/issues">https://github.com/nakamura196/iiif-ar-ios/issues</a></p>

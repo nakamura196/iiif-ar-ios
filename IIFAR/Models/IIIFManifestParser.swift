@@ -32,6 +32,15 @@ struct IIIFManifestParser {
 
         let summary = extractSummary(from: json)
 
+        // Extract attribution
+        let attribution = extractAttribution(from: json)
+
+        // Extract rights
+        let rights = json["rights"] as? String
+
+        // Extract metadata fields
+        let metadata = extractMetadata(from: json)
+
         return IIIFManifest(
             label: label,
             summary: summary,
@@ -39,7 +48,10 @@ struct IIIFManifestParser {
             canvasHeight: pixelHeight,
             iiifServiceURL: serviceURL,
             realWidthCm: realWidthCm,
-            realHeightCm: realHeightCm
+            realHeightCm: realHeightCm,
+            attribution: attribution,
+            rights: rights,
+            metadata: metadata
         )
     }
 
@@ -65,6 +77,35 @@ struct IIIFManifestParser {
             return summary
         }
         return nil
+    }
+
+    // MARK: - Attribution
+
+    /// Extract attribution from requiredStatement.
+    static func extractAttribution(from dict: [String: Any]) -> String? {
+        if let req = dict["requiredStatement"] as? [String: Any],
+           let value = req["value"] as? [String: [String]] {
+            return value["ja"]?.first ?? value["en"]?.first ?? value["none"]?.first
+        }
+        return nil
+    }
+
+    // MARK: - Metadata
+
+    /// Extract metadata key-value pairs, excluding system fields.
+    static func extractMetadata(from dict: [String: Any]) -> [(label: String, value: String)] {
+        guard let metadataArray = dict["metadata"] as? [[String: Any]] else { return [] }
+
+        let systemLabels = Set(["作成日", "Created", "コレクションID", "Collection ID", "更新日", "Updated", "公開設定", "Visibility"])
+
+        return metadataArray.compactMap { entry in
+            guard let labelDict = entry["label"] as? [String: [String]],
+                  let valueDict = entry["value"] as? [String: [String]] else { return nil }
+            let label = labelDict["ja"]?.first ?? labelDict["en"]?.first ?? ""
+            let value = valueDict["ja"]?.first ?? valueDict["en"]?.first ?? ""
+            guard !label.isEmpty, !value.isEmpty, !systemLabels.contains(label) else { return nil }
+            return (label: label, value: value)
+        }
     }
 
     // MARK: - IIIF Image Service URL
