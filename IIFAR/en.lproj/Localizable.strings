@@ -54,3 +54,12 @@
 
 /* Dummy Image */
 "dummy_grid_label" = "Grid: 10 cm spacing";
+
+/* Auth */
+"login_google" = "Sign in with Google";
+"login_guest" = "Continue as Guest";
+"login_subtitle" = "View historical maps and illustrations in AR at real-world scale";
+"account_section" = "Account";
+"account_guest_mode" = "Guest Mode";
+"account_sign_in" = "Sign In";
+"account_logout" = "Log Out";

@@ -2,11 +2,64 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var arManager: ARManager
+    @ObservedObject var authManager: AuthManager
+    @Binding var isGuestMode: Bool
     @Binding var isPresented: Bool
 
     var body: some View {
         NavigationStack {
             Form {
+                // Account section
+                if authManager.isLoggedIn {
+                    Section("アカウント") {
+                        HStack(spacing: 12) {
+                            if let photoURL = authManager.photoURL {
+                                AsyncImage(url: photoURL) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .font(.title)
+                                        .foregroundColor(.secondary)
+                                }
+                                .frame(width: 40, height: 40)
+                                .clipShape(Circle())
+                            } else {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .font(.title)
+                                    .foregroundColor(.secondary)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                if !authManager.displayName.isEmpty {
+                                    Text(authManager.displayName)
+                                        .font(.subheadline.bold())
+                                }
+                                if !authManager.email.isEmpty {
+                                    Text(authManager.email)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        Button(role: .destructive) {
+                            try? authManager.signOut()
+                        } label: {
+                            Label("ログアウト", systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                    }
+                } else if isGuestMode {
+                    Section("アカウント") {
+                        Text("ゲストモード")
+                            .foregroundColor(.secondary)
+                        Button {
+                            isGuestMode = false
+                        } label: {
+                            Label("サインイン", systemImage: "person.crop.circle")
+                        }
+                    }
+                }
+
                 Section("表示") {
                     HStack {
                         Text("透明度")

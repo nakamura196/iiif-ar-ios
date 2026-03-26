@@ -54,3 +54,12 @@
 
 /* Dummy Image */
 "dummy_grid_label" = "グリッド: 10cm間隔";
+
+/* Auth */
+"login_google" = "Googleでサインイン";
+"login_guest" = "ゲストとして続ける";
+"login_subtitle" = "歴史的な地図や図版をARで実寸表示";
+"account_section" = "アカウント";
+"account_guest_mode" = "ゲストモード";
+"account_sign_in" = "サインイン";
+"account_logout" = "ログアウト";

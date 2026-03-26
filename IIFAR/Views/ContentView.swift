@@ -3,11 +3,25 @@ import AVFoundation
 
 struct ContentView: View {
     @StateObject private var arManager = ARManager()
+    @StateObject private var authManager = AuthManager()
     @State private var showingGallery = true
     @State private var showingSettings = false
     @State private var cameraAuthorized = false
+    @State private var isGuestMode = false
 
     var body: some View {
+        Group {
+            if authManager.isLoading {
+                ProgressView()
+            } else if authManager.isLoggedIn || isGuestMode {
+                mainContentView
+            } else {
+                LoginView(authManager: authManager, isGuestMode: $isGuestMode)
+            }
+        }
+    }
+
+    private var mainContentView: some View {
         Group {
             if cameraAuthorized {
                 arContentView
@@ -162,7 +176,7 @@ struct ContentView: View {
             GalleryView(arManager: arManager, isPresented: $showingGallery)
         }
         .sheet(isPresented: $showingSettings) {
-            SettingsView(arManager: arManager, isPresented: $showingSettings)
+            SettingsView(arManager: arManager, authManager: authManager, isGuestMode: $isGuestMode, isPresented: $showingSettings)
         }
     }
 }

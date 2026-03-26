@@ -41,5 +41,14 @@
     <string>ARで床面を検出し、画像を配置するためにカメラを使用します。</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>com.googleusercontent.apps.610408930351-7c0i8f7rqb0gr638k0mtgn6spi2mgu8a</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>
