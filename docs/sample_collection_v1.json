@@ -1,0 +1,34 @@
+{
+  "@context": "http://iiif.io/api/presentation/3/context.json",
+  "id": "https://nakamura196.github.io/iiif-ar-ios/sample_collection.json",
+  "type": "Collection",
+  "label": { "ja": ["IIIF AR サンプルコレクション（参考用・2次利用不可のものを含む）"] },
+  "items": [
+    {
+      "id": "https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2Fsho.tif",
+      "type": "Manifest",
+      "label": { "ja": ["琉球国之図"] },
+      "metadata": [
+        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["沖縄美ら島財団"] } },
+        { "label": { "ja": ["製作年"] }, "value": { "ja": ["嘉慶元年（1796年）"] } },
+        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦47.3cm、横96.8cm"] } },
+        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["25167×12483"] } },
+        { "label": { "ja": ["注意"] }, "value": { "ja": ["2次利用不可。閲覧のみ。"] } }
+      ],
+      "summary": { "ja": ["嘉慶元年（1796年）に琉球独自の測量技術で作られた精密な絵図。首里王府の命により測量家の高原景宅が製作。沖縄本島と周辺諸島を描き、間切や島ごとに美しく塗り分けられた歴史史料。"] }
+    },
+    {
+      "id": "https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2Fcbd4f3b8-e6ec-4c15-9ffc-79badb88127f.tif",
+      "type": "Manifest",
+      "label": { "ja": ["琉球国図"] },
+      "metadata": [
+        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["沖縄県立博物館・美術館"] } },
+        { "label": { "ja": ["奉納年"] }, "value": { "ja": ["元禄9年（1696年）"] } },
+        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦175.8cm、横87.8cm"] } },
+        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["9449×20724"] } },
+        { "label": { "ja": ["注意"] }, "value": { "ja": ["2次利用不可。閲覧のみ。"] } }
+      ],
+      "summary": { "ja": ["元禄9年（1696）に大宰府天満宮に奉納された掛幅の大型絵図。九州南部から沖縄本島を中心とする琉球の島々と航路が描かれている。"] }
+    }
+  ]
+}

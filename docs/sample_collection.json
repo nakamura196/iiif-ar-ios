@@ -1,34 +1,44 @@
 {
   "@context": "http://iiif.io/api/presentation/3/context.json",
-  "id": "https://nakamura196.github.io/iiif-ar-ios/sample_collection.json",
+  "id": "https://nakamura196.github.io/ezu/sample_collection.json",
   "type": "Collection",
-  "label": { "ja": ["IIIF AR サンプルコレクション（参考用・2次利用不可のものを含む）"] },
+  "label": { "ja": ["IIIF AR サンプルコレクション（東京大学史料編纂所所蔵）"] },
   "items": [
     {
-      "id": "https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2Fsho.tif",
+      "id": "https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2F6ac7a5b6-1a7a-4371-92fa-5b43e689ac52.tif",
       "type": "Manifest",
-      "label": { "ja": ["琉球国之図"] },
+      "label": { "ja": ["海東諸国紀"] },
       "metadata": [
-        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["沖縄美ら島財団"] } },
-        { "label": { "ja": ["製作年"] }, "value": { "ja": ["嘉慶元年（1796年）"] } },
-        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦47.3cm、横96.8cm"] } },
-        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["25167×12483"] } },
-        { "label": { "ja": ["注意"] }, "value": { "ja": ["2次利用不可。閲覧のみ。"] } }
+        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["東京大学史料編纂所"] } },
+        { "label": { "ja": ["製作年"] }, "value": { "ja": ["正徳7年（1512）"] } },
+        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦21.2cm、横32.6cm"] } },
+        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["4474×3918"] } }
       ],
-      "summary": { "ja": ["嘉慶元年（1796年）に琉球独自の測量技術で作られた精密な絵図。首里王府の命により測量家の高原景宅が製作。沖縄本島と周辺諸島を描き、間切や島ごとに美しく塗り分けられた歴史史料。"] }
+      "summary": { "ja": ["朝鮮成宗2年（1471）に申叔舟が編纂した海東諸国（日本国・琉球国）の研究書。史料編纂所本は朝鮮活字版の冊子で、正徳7年（1512）の善本。"] }
     },
     {
-      "id": "https://cantaloupe.lab.hi.u-tokyo.ac.jp/iiif/2/clioimg%2Fcbd4f3b8-e6ec-4c15-9ffc-79badb88127f.tif",
+      "id": "https://www.hi.u-tokyo.ac.jp/collection/digitalgallery/wakozukan/data/files/tile/wakozukan",
       "type": "Manifest",
-      "label": { "ja": ["琉球国図"] },
+      "label": { "ja": ["倭寇図巻"] },
       "metadata": [
-        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["沖縄県立博物館・美術館"] } },
-        { "label": { "ja": ["奉納年"] }, "value": { "ja": ["元禄9年（1696年）"] } },
-        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦175.8cm、横87.8cm"] } },
-        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["9449×20724"] } },
-        { "label": { "ja": ["注意"] }, "value": { "ja": ["2次利用不可。閲覧のみ。"] } }
+        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["東京大学史料編纂所"] } },
+        { "label": { "ja": ["製作年"] }, "value": { "ja": ["明代末期（〜17世紀前半）"] } },
+        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦32.0cm、横523.0cm"] } },
+        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["90916×6615"] } }
       ],
-      "summary": { "ja": ["元禄9年（1696）に大宰府天満宮に奉納された掛幅の大型絵図。九州南部から沖縄本島を中心とする琉球の島々と航路が描かれている。"] }
+      "summary": { "ja": ["20世紀初頭に中国から日本に渡った絵巻で、倭寇との戦いを着色で描いた唯一の史料。中国国家博物館所蔵「抗倭図巻」との関連が近年の研究で明らかにされている。"] }
+    },
+    {
+      "id": "https://www.hi.u-tokyo.ac.jp/collection/digitalgallery/ryukyu/data/files/tile/0002",
+      "type": "Manifest",
+      "label": { "ja": ["正保琉球国悪鬼納島絵図写"] },
+      "metadata": [
+        { "label": { "ja": ["所蔵"] }, "value": { "ja": ["東京大学史料編纂所（国宝・島津家文書）"] } },
+        { "label": { "ja": ["製作年"] }, "value": { "ja": ["正保年間（1644〜）、写は元禄頃"] } },
+        { "label": { "ja": ["法量"] }, "value": { "ja": ["縦353.7cm、横621.6cm"] } },
+        { "label": { "ja": ["ピクセル"] }, "value": { "ja": ["49797×28435"] } }
+      ],
+      "summary": { "ja": ["正保の国絵図のうち琉球国悪鬼納島（沖縄本島）の絵図。薩摩藩が原寸大で忠実に写したもので、国宝「島津家文書」に含まれる。大型琉球絵図としては最古のもの。"] }
     }
   ]
 }
