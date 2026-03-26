@@ -36,6 +36,11 @@ targets:
         product: GoogleSignIn
       - package: GoogleSignIn-iOS
         product: GoogleSignInSwift
+    entitlements:
+      path: IIFAR/IIFAR.entitlements
+      properties:
+        com.apple.developer.applesignin:
+          - Default
     settings:
       base:
         INFOPLIST_FILE: IIFAR/Info.plist

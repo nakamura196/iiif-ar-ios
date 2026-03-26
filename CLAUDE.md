@@ -4,13 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-IIIF AR (folder: IIFAR) — iOS AR app for placing IIIF historical maps and illustrations at real-world scale using ARKit. Users select a historical image from a gallery, then tap a detected floor plane to overlay it in augmented reality at its true physical dimensions. Includes a tile-based deep zoom system for close-up detail via IIIF Image API, a Tip Jar for voluntary support, camera permission handling, and Japanese/English localization.
+IIIF AR (folder: IIFAR) — iOS AR app for placing IIIF historical maps and illustrations at real-world scale using ARKit. Users select a historical image from a gallery or from their Pocket collections, then tap a detected floor plane to overlay it in augmented reality at its true physical dimensions. Includes a tile-based deep zoom system for close-up detail via IIIF Image API, Pocket collection integration, Firebase authentication, a Tip Jar for voluntary support, camera permission handling, and Japanese/English localization.
 
 - **Display name**: IIIF AR (set via `PRODUCT_NAME` in `project.yml`)
 - **Bundle ID**: `com.nakamura196.iifar`
 - **Deployment target**: iOS 16.0+
 - **Language**: Swift 5.9, SwiftUI
-- **Frameworks**: ARKit, RealityKit, StoreKit 2
+- **Frameworks**: ARKit, RealityKit, StoreKit 2, Firebase (Auth, Crashlytics, Analytics, Performance), GoogleSignIn
 
 ## Build Commands
 
@@ -54,18 +54,25 @@ IIIF tile URL format: `{baseURL}/{x},{y},{w},{h}/{outW},{outH}/0/default.jpg`
 ### UI Flow (IIFAR/Views/)
 
 ```text
-ContentView (camera permission gate, then AR fullscreen + overlay controls)
+ContentView (auth gate → camera permission gate → AR fullscreen + overlay controls)
+  ├── LoginView — Google Sign-In, Apple Sign-In, or guest mode
   ├── CameraPermissionView — Requests camera access or directs to Settings
-  ├── GalleryView (sheet) — List of SampleImage entries with thumbnails
-  │   └── ImageDetailView — Image preview, metadata, "ARで配置" button
+  ├── GalleryView (sheet) — Segmented tabs: Samples / My Collections
+  │   ├── [Samples tab] — List of SampleImage entries with thumbnails
+  │   │   └── ImageDetailView — Image preview, metadata, "ARで配置" button
+  │   └── [My Collections tab] — MyCollectionsView (requires login)
+  │       └── CollectionItemsView — Items in a Pocket collection with thumbnails
+  │           └── ImageDetailView — Manifest-based image preview + AR placement
   ├── SettingsView (sheet) — Opacity slider, corner poles toggle, pole height,
   │   │                       plane detection visibility, image info, tile debug info
   │   └── TipJarView — StoreKit 2 consumable tip products (NavigationLink)
   └── AR overlay controls — Status messages, opacity slider, gallery/settings/trash buttons
 ```
 
-- On launch, `CameraPermissionView` checks camera authorization before showing AR
-- GalleryView is presented as a sheet
+- On launch, `LoginView` presents sign-in options; guest mode skips authentication
+- After authentication or guest mode, `CameraPermissionView` checks camera authorization before showing AR
+- GalleryView is presented as a sheet with a segmented picker (Samples / My Collections)
+- The My Collections tab fetches collections from Pocket via `PocketAPIClient`
 - Selecting an image and tapping "ARで配置" dismisses the gallery and loads the image via IIIF
 - Status messages guide the user: plane scanning, tap to place, loading indicator
 - After placement: opacity slider appears inline, trash button to remove
@@ -76,6 +83,10 @@ ContentView (camera permission gate, then AR fullscreen + overlay controls)
 - **`ARManager`** — `@MainActor ObservableObject` holding AR state: current image/sample, placement status, opacity (0.1-1.0), pole height (0.3-3.0m), rotation, tile debug info (zoom level, visible/loaded tile counts, camera distance). Communicates with ARViewContainer via closures (`onImageUpdated`, `onOpacityChanged`, etc.)
 - **`TileKey`** — Hashable identifier for a tile: `scaleFactor`, `tileX`, `tileY`
 - **`TipJarManager`** — `@MainActor ObservableObject` managing StoreKit 2 product loading and consumable purchases
+- **`AuthManager`** — `@MainActor ObservableObject` wrapping Firebase Auth state. Provides Google Sign-In, Apple Sign-In, sign-out, and Firebase ID token retrieval. Listens to `Auth.auth().addStateDidChangeListener` for reactive auth state updates
+- **`PocketCollection`** — Collection metadata parsed from the Pocket API: `id`, `label`, `summary`, `itemCount`
+- **`PocketItem`** — Item metadata parsed from a IIIF Collection response: `id`, `manifestURL`, `label`, `summary`, `thumbnailURL`
+- **`IIIFManifest`** — Lightweight representation of a IIIF Presentation API 3.0 Manifest: `label`, `summary`, canvas dimensions, IIIF service URL, physical dimensions in cm, attribution, rights, and metadata key-value pairs
 
 ### IIIF Integration
 

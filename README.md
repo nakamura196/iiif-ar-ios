@@ -20,6 +20,9 @@ Inspired by [BookSnake](https://apps.apple.com/us/app/booksnake/id6478938687).
 - **視錐台カリング / Frustum culling** — カメラに映るタイルのみを取得し、メモリとネットワーク帯域を節約 / Fetches only tiles visible in the camera frustum, saving memory and bandwidth
 - **IIIF URL入力 / IIIF URL input** — Image APIベースURL、info.json、Presentation API 3.0マニフェストに対応 / Supports Image API base URLs, info.json, and Presentation API 3.0 manifests
 - **物理サイズ自動検出 / Auto-detect physical dimensions** — マニフェストのPhysicalDimensionサービスから実寸を自動取得 / Automatically extracts real-world dimensions from the manifest's PhysicalDimension service
+- **コレクション連携 / Collection integration** — [Pocket](https://pocket.webcatplus.jp) と連携し、IIIF Collection/Manifest経由でユーザーのコレクションをAR表示。APIキーによる外部ツールからのデータ管理にも対応 / Integrate with [Pocket](https://pocket.webcatplus.jp) to browse and display user collections in AR via IIIF Collection/Manifest. Supports data management from external tools via API key
+- **認証 / Authentication** — Google Sign-In / Apple Sign-In（Firebase Auth）に対応。ゲストモードではログインなしでサンプル画像を利用可能 / Google Sign-In and Apple Sign-In via Firebase Auth. Guest mode allows using sample images without signing in
+- **運用監視 / Monitoring** — Firebase Crashlytics、Analytics、Performanceによるクラッシュ報告・利用状況分析・パフォーマンス監視 / Crash reporting, usage analytics, and performance monitoring via Firebase Crashlytics, Analytics, and Performance
 - **回転 / Rotation** — 0° / 90° / 180° / 270° のプリセット回転 / Preset rotation at 0°, 90°, 180°, 270°
 - **透明度調整 / Opacity control** — スライダーで画像の透明度をリアルタイム変更 / Adjust image opacity in real-time with a slider
 - **コーナーポール / Corner poles** — 画像の四隅に高さ調整可能なポールを表示 / Display height-adjustable poles at the four corners of the image
@@ -37,6 +40,25 @@ All materials are held by the Historiographical Institute, The University of Tok
 | 海東諸国紀（1512年善本） | 小 | 4,474 x 3,918 | 32.6 x 21.2 cm |
 | 倭寇図巻（明代末期） | 中 | 90,916 x 6,615 | 5.2 x 0.3 m |
 | 正保琉球国悪鬼納島絵図写（国宝・島津家文書） | 大 | 49,797 x 28,435 | 6.2 x 3.5 m |
+
+ログインユーザーは、Pocketに登録したコレクションからも画像を選択できます。
+Logged-in users can also select images from their collections registered in Pocket.
+
+## Pocket連携 / Pocket Integration
+
+[Pocket](https://pocket.webcatplus.jp) はIIIFコレクション管理サービスです。本アプリと連携してコレクション内の画像をARで表示できます。
+[Pocket](https://pocket.webcatplus.jp) is a IIIF collection management service. It integrates with this app to display collection images in AR.
+
+### 利用方法 / How to use
+
+1. **ログイン / Sign in** — Google または Apple でサインイン / Sign in with Google or Apple
+2. **コレクション閲覧 / Browse collections** — ギャラリー画面の「マイコレクション」タブからPocketのコレクション一覧を表示 / Open the "My Collections" tab in the gallery to view your Pocket collections
+3. **画像選択 / Select an image** — コレクション内のアイテムを選択し、IIIF Manifestから画像メタデータと物理サイズを取得してARに配置 / Select an item from a collection; the app fetches image metadata and physical dimensions from the IIIF Manifest for AR placement
+
+### API連携 / API Integration
+
+Pocketでは `pkt_` プレフィックス付きのAPIキーを使用して外部ツールからデータを管理できます。詳細はPocketのドキュメントを参照してください。
+Pocket supports data management from external tools using API keys with the `pkt_` prefix. See the Pocket documentation for details.
 
 ## 要件 / Requirements
 
@@ -77,7 +99,9 @@ xcodebuild build \
 | ARKit + RealityKit | AR空間での床面検出・画像配置 / Floor detection and image placement in AR |
 | IIIF Image API 2.0 | タイルベースの高解像度画像取得 / Tile-based high-resolution image fetching |
 | IIIF Presentation API 3.0 | マニフェスト解析・物理サイズ取得 / Manifest parsing and physical dimension extraction |
-| SwiftUI | ギャラリー・設定画面のUI / Gallery and settings UI |
+| Firebase Auth | Google Sign-In / Apple Sign-In による認証 / Authentication via Google Sign-In and Apple Sign-In |
+| Firebase Crashlytics, Analytics, Performance | クラッシュ報告・利用分析・パフォーマンス監視 / Crash reporting, usage analytics, and performance monitoring |
+| SwiftUI | ギャラリー・設定画面・ログイン画面のUI / Gallery, settings, and login UI |
 | Swift Concurrency | 非同期タイル取得・並列サムネイル読込 / Async tile fetching and parallel thumbnail loading |
 | StoreKit 2 | アプリ内課金（Tip Jar） / In-app purchases (Tip Jar) |
 | XcodeGen | プロジェクトファイル生成 / Project file generation |

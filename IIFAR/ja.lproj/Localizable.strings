@@ -56,6 +56,7 @@
 "dummy_grid_label" = "グリッド: 10cm間隔";
 
 /* Auth */
+"sign_in_apple" = "Appleでサインイン";
 "login_google" = "Googleでサインイン";
 "login_guest" = "ゲストとして続ける";
 "login_subtitle" = "歴史的な地図や図版をARで実寸表示";

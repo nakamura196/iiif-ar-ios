@@ -1,5 +1,6 @@
 import SwiftUI
 import GoogleSignInSwift
+import AuthenticationServices
 
 struct LoginView: View {
     @ObservedObject var authManager: AuthManager
@@ -18,7 +19,7 @@ struct LoginView: View {
                     .foregroundColor(.accentColor)
                 Text("IIIF AR")
                     .font(.largeTitle.bold())
-                Text("歴史的な地図や図版をARで実寸表示")
+                Text(NSLocalizedString("login_subtitle", comment: ""))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -28,6 +29,24 @@ struct LoginView: View {
 
             // Sign-in buttons
             VStack(spacing: 16) {
+                // Apple Sign-In button (placed first per Apple guidelines)
+                Button {
+                    signInWithApple()
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: "apple.logo")
+                            .font(.title3)
+                        Text(NSLocalizedString("sign_in_apple", comment: ""))
+                            .font(.headline)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(.black)
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+                }
+                .disabled(isSigningIn)
+
                 // Google Sign-In button
                 Button {
                     signInWithGoogle()
@@ -35,7 +54,7 @@ struct LoginView: View {
                     HStack(spacing: 12) {
                         Image(systemName: "person.crop.circle.fill")
                             .font(.title3)
-                        Text("Googleでサインイン")
+                        Text(NSLocalizedString("login_google", comment: ""))
                             .font(.headline)
                     }
                     .frame(maxWidth: .infinity)
@@ -50,7 +69,7 @@ struct LoginView: View {
                 Button {
                     isGuestMode = true
                 } label: {
-                    Text("ゲストとして続ける")
+                    Text(NSLocalizedString("login_guest", comment: ""))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
@@ -73,6 +92,19 @@ struct LoginView: View {
                 .frame(height: 60)
         }
         .padding()
+    }
+
+    private func signInWithApple() {
+        isSigningIn = true
+        errorMessage = nil
+        Task {
+            do {
+                try await authManager.signInWithApple()
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            isSigningIn = false
+        }
     }
 
     private func signInWithGoogle() {

@@ -5,7 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IIIF AR — View Cultural Heritage in Augmented Reality</title>
 <meta name="description" content="IIIF画像をARで実寸表示。歴史的な絵図や古地図を、現実空間に原寸大で配置して鑑賞できるiOSアプリ。">
+<!-- OGP -->
+<meta property="og:title" content="IIIF AR — 文化遺産を実寸のARで体験">
+<meta property="og:description" content="IIIF対応の歴史的絵図・古地図をAR（拡張現実）で実寸表示するiOSアプリ。世界中のデジタルアーカイブの資料を現実空間に原寸大で配置。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nakamura196.github.io/iiif-ar-ios/">
+<meta property="og:image" content="https://nakamura196.github.io/iiif-ar-ios/icon.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="1024">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="IIIF AR">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IIIF AR — View Cultural Heritage in Augmented Reality">
+<meta name="twitter:description" content="Place IIIF historical maps and illustrations in AR at their true physical size.">
+<meta name="twitter:image" content="https://nakamura196.github.io/iiif-ar-ios/icon.png">
+<!-- Apple -->
+<meta name="apple-itunes-app" content="app-id=6761031891">
 <link rel="icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="icon.png">
 <style>
   :root {
     --bg: #faf8f4;
@@ -385,12 +404,12 @@
   <img src="icon.png" alt="IIIF AR" class="hero-icon" onerror="this.style.display='none'">
   <h1>IIIF AR</h1>
   <p class="subtitle">
-    <span class="ja">文化遺産を、実寸のARで体験する</span>
-    <span class="en">Explore Cultural Heritage at Real Scale</span>
+    <span class="ja">歴史的絵図をARで実寸表示</span>
+    <span class="en">View Historical Maps in AR at Actual Scale</span>
   </p>
   <p class="description">
-    <span class="ja">歴史的な絵図や古地図を、ARで現実空間に原寸大で配置。近づけば細部まで高精細に表示される、IIIF対応のiOSアプリです。</span>
-    <span class="en">Place historical maps and illustrations in your real space at their true physical size. Move closer to reveal high-resolution details through IIIF deep zoom. An iOS AR app for cultural heritage.</span>
+    <span class="ja">IIIF Image APIに対応した歴史的絵図・古地図を、ARで現実空間に実寸表示するiOSアプリです。カメラを近づけると段階的に高解像度のタイル画像を読み込みます。</span>
+    <span class="en">An iOS app that displays IIIF-compatible historical maps and illustrations in augmented reality at their recorded physical dimensions. Tile-based progressive loading provides detail as you move closer.</span>
   </p>
   <div class="hero-badges">
     <a href="#" class="btn-appstore">
@@ -412,8 +431,8 @@
     <span class="en">Features</span>
   </h2>
   <p class="section-lead">
-    <span class="ja">IIIF画像を、かつてない方法で体験する</span>
-    <span class="en">Experience IIIF images like never before</span>
+    <span class="ja">IIIF画像をAR空間で閲覧する</span>
+    <span class="en">View IIIF images in augmented reality</span>
   </p>
   <div class="features-grid">
     <div class="feature-card">
@@ -423,8 +442,8 @@
         <span class="en">Real-Scale AR Placement</span>
       </h3>
       <p>
-        <span class="ja">歴史資料の実際の寸法をメタデータから取得し、現実空間に原寸大で配置します。畳一枚大の絵図もそのままのサイズで体験できます。</span>
-        <span class="en">Place historical materials at their true physical dimensions in your real space. Experience the actual size of maps that span over a meter.</span>
+        <span class="ja">資料のメタデータに記録された実寸（法量）をもとに、AR空間に原寸大で配置します。</span>
+        <span class="en">Uses physical dimensions from metadata to place materials at their recorded actual size in AR space.</span>
       </p>
     </div>
     <div class="feature-card">
@@ -434,8 +453,8 @@
         <span class="en">Deep Zoom: Move Closer to See More</span>
       </h3>
       <p>
-        <span class="ja">カメラを近づけると自動的に高解像度タイルを読み込み、筆致や文字の細部まで鮮明に表示します。IIIFのタイルシステムを活用した段階的なズームです。</span>
-        <span class="en">As you move the camera closer, high-resolution tiles load automatically, revealing brushstrokes and fine details. Progressive zoom powered by the IIIF tile system.</span>
+        <span class="ja">カメラとの距離に応じてIIIF Image APIのタイルを段階的に読み込み、近づくほど高解像度の画像を表示します。</span>
+        <span class="en">Progressively loads IIIF Image API tiles based on camera distance, displaying higher resolution as you move closer.</span>
       </p>
     </div>
     <div class="feature-card">
@@ -445,8 +464,8 @@
         <span class="en">Works with Any IIIF Endpoint</span>
       </h3>
       <p>
-        <span class="ja">IIIF Image API 2.0に準拠したあらゆるサーバーの画像を表示可能。世界中のデジタルアーカイブの資料をARで鑑賞できます。</span>
-        <span class="en">Display images from any IIIF Image API 2.0 compliant server. Explore cultural heritage from digital archives worldwide in AR.</span>
+        <span class="ja">IIIF Image API 2.0準拠のサーバーから画像を取得・表示します。各機関が公開するデジタルアーカイブの画像をARで閲覧できます。</span>
+        <span class="en">Fetches and displays images from IIIF Image API 2.0 compliant servers. Browse digital archive images published by various institutions in AR.</span>
       </p>
     </div>
     <div class="feature-card">
@@ -456,8 +475,8 @@
         <span class="en">Placement Preview with Corner Markers</span>
       </h3>
       <p>
-        <span class="ja">配置前にコーナーポールで実寸の範囲を確認。床面の平面検出で正確な位置に配置でき、不透明度の調整も可能です。</span>
-        <span class="en">Confirm the real-world extent with corner poles before placement. Accurate floor plane detection, with adjustable opacity.</span>
+        <span class="ja">配置前にコーナーポールで実寸の範囲を確認できます。床面の平面検出による配置と、不透明度の調整に対応しています。</span>
+        <span class="en">Preview the physical extent with corner poles before placement. Supports floor plane detection and adjustable opacity.</span>
       </p>
     </div>
   </div>
@@ -520,12 +539,12 @@
 <!-- Sample images -->
 <section>
   <h2>
-    <span class="ja">収録画像</span>
+    <span class="ja">サンプル画像</span>
     <span class="en">Sample Images</span>
   </h2>
   <p class="section-lead">
-    <span class="ja">東京大学史料編纂所所蔵の歴史的絵図3点を収録</span>
-    <span class="en">Three historical materials from the Historiographical Institute, University of Tokyo</span>
+    <span class="ja">以下はアプリに含まれるサンプル画像です。ログインすると自分のコレクションも表示できます。</span>
+    <span class="en">The following are sample images included in the app. Sign in to view your own collections.</span>
   </p>
   <div class="samples-grid">
 
@@ -612,8 +631,8 @@
       <span class="en">Technology</span>
     </h2>
     <p class="section-lead">
-      <span class="ja">Appleの最新AR技術とIIIF標準規格</span>
-      <span class="en">Built on Apple's AR frameworks and the IIIF standard</span>
+      <span class="ja">使用しているフレームワークと規格</span>
+      <span class="en">Frameworks and standards used</span>
     </p>
     <div class="tech-grid">
       <div class="tech-card">
