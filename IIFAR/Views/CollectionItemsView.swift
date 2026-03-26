@@ -67,6 +67,7 @@ struct CollectionItemsView: View {
             NavigationLink {
                 CollectionItemDetailView(
                     item: item,
+                    collectionId: collection.id,
                     arManager: arManager,
                     authManager: authManager,
                     isGalleryPresented: $isGalleryPresented
@@ -81,9 +82,7 @@ struct CollectionItemsView: View {
         isLoading = true
         errorMessage = nil
         do {
-            let token = try await authManager.getIdToken()
-            let client = PocketAPIClient(idToken: token)
-            items = try await client.fetchItems(collectionId: collection.id)
+            items = try await PocketAPIClient.shared.fetchItems(collectionId: collection.id)
             await loadThumbnails()
         } catch {
             errorMessage = error.localizedDescription
@@ -159,6 +158,7 @@ private struct ItemRow: View {
 
 struct CollectionItemDetailView: View {
     let item: PocketItem
+    let collectionId: String
     @ObservedObject var arManager: ARManager
     @ObservedObject var authManager: AuthManager
     @Binding var isGalleryPresented: Bool
@@ -259,22 +259,17 @@ struct CollectionItemDetailView: View {
         isLoadingManifest = true
         errorMessage = nil
         do {
-            let token = try await authManager.getIdToken()
-            let client = PocketAPIClient(idToken: token)
-            let fetchedManifest = try await client.fetchManifest(itemId: item.id)
+            let userId = authManager.user?.uid ?? ""
+            let fetchedManifest = try await PocketAPIClient.shared.fetchManifest(
+                userId: userId,
+                collectionId: collectionId,
+                itemId: item.id
+            )
             manifest = fetchedManifest
 
-            let sample = SampleImage(
-                id: item.id,
-                name: fetchedManifest.label,
-                description: fetchedManifest.summary ?? item.displayName,
-                detail: fetchedManifest.summary ?? "",
-                sizeLabel: sizeLabel(for: fetchedManifest),
-                iiifBaseURL: fetchedManifest.iiifServiceURL,
-                pixelWidth: fetchedManifest.canvasWidth,
-                pixelHeight: fetchedManifest.canvasHeight,
-                realWidthCm: fetchedManifest.realWidthCm,
-                realHeightCm: fetchedManifest.realHeightCm
+            let sample = await PocketAPIClient.shared.manifestToSampleImage(
+                manifest: fetchedManifest,
+                itemId: item.id
             )
 
             isGalleryPresented = false
@@ -283,19 +278,6 @@ struct CollectionItemDetailView: View {
             errorMessage = error.localizedDescription
         }
         isLoadingManifest = false
-    }
-
-    private func sizeLabel(for manifest: IIIFManifest) -> String {
-        let maxCm = max(manifest.realWidthCm, manifest.realHeightCm)
-        if maxCm < 50 {
-            return NSLocalizedString("size_small", comment: "")
-        } else if maxCm < 100 {
-            return NSLocalizedString("size_medium", comment: "")
-        } else if maxCm < 200 {
-            return NSLocalizedString("size_large", comment: "")
-        } else {
-            return NSLocalizedString("size_extra_large", comment: "")
-        }
     }
 
     private func formatSize(widthCm: Double, heightCm: Double) -> String {
