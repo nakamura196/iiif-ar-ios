@@ -63,3 +63,15 @@
 "account_guest_mode" = "ゲストモード";
 "account_sign_in" = "サインイン";
 "account_logout" = "ログアウト";
+
+/* My Collections */
+"my_collections" = "マイコレクション";
+"samples" = "サンプル";
+"login_for_collections" = "ログインするとコレクションを利用できます";
+"no_collections" = "コレクションがありません";
+"no_items" = "アイテムがありません";
+"loading_collections" = "コレクションを読み込み中...";
+"items_count" = "%d 件";
+"physical_size" = "実寸: %@";
+"place_in_ar" = "ARで配置";
+"retry" = "再試行";

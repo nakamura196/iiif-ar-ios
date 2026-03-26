@@ -173,7 +173,7 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showingGallery) {
-            GalleryView(arManager: arManager, isPresented: $showingGallery)
+            GalleryView(arManager: arManager, authManager: authManager, isPresented: $showingGallery)
         }
         .sheet(isPresented: $showingSettings) {
             SettingsView(arManager: arManager, authManager: authManager, isGuestMode: $isGuestMode, isPresented: $showingSettings)

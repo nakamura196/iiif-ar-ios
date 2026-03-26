@@ -2,36 +2,64 @@ import SwiftUI
 
 struct GalleryView: View {
     @ObservedObject var arManager: ARManager
+    @ObservedObject var authManager: AuthManager
     @Binding var isPresented: Bool
     @State private var thumbnails: [String: UIImage] = [:]
     @State private var showingAddImage = false
+    @State private var selectedTab: GalleryTab = .samples
+
+    private enum GalleryTab: String, CaseIterable {
+        case samples
+        case myCollections
+
+        var label: String {
+            switch self {
+            case .samples:
+                return NSLocalizedString("samples", comment: "")
+            case .myCollections:
+                return NSLocalizedString("my_collections", comment: "")
+            }
+        }
+    }
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(SampleImage.samples) { sample in
-                    NavigationLink {
-                        ImageDetailView(
-                            sample: sample,
-                            arManager: arManager,
-                            isGalleryPresented: $isPresented
-                        )
-                    } label: {
-                        SampleRow(sample: sample, thumbnail: thumbnails[sample.id])
+            VStack(spacing: 0) {
+                // Segmented control
+                Picker("", selection: $selectedTab) {
+                    ForEach(GalleryTab.allCases, id: \.self) { tab in
+                        Text(tab.label).tag(tab)
                     }
                 }
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+
+                // Tab content
+                switch selectedTab {
+                case .samples:
+                    samplesListView
+                case .myCollections:
+                    MyCollectionsView(
+                        arManager: arManager,
+                        authManager: authManager,
+                        isGalleryPresented: $isPresented
+                    )
+                }
             }
-            .navigationTitle("画像一覧")
+            .navigationTitle(NSLocalizedString("gallery_title", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("閉じる") { isPresented = false }
+                    Button(NSLocalizedString("gallery_close", comment: "")) { isPresented = false }
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showingAddImage = true
-                    } label: {
-                        Label("画像を追加", systemImage: "plus")
+                if selectedTab == .samples {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button {
+                            showingAddImage = true
+                        } label: {
+                            Label("画像を追加", systemImage: "plus")
+                        }
                     }
                 }
             }
@@ -41,6 +69,22 @@ struct GalleryView: View {
         }
         .task {
             await loadThumbnails()
+        }
+    }
+
+    private var samplesListView: some View {
+        List {
+            ForEach(SampleImage.samples) { sample in
+                NavigationLink {
+                    ImageDetailView(
+                        sample: sample,
+                        arManager: arManager,
+                        isGalleryPresented: $isPresented
+                    )
+                } label: {
+                    SampleRow(sample: sample, thumbnail: thumbnails[sample.id])
+                }
+            }
         }
     }
 

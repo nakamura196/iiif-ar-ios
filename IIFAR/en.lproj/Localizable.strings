@@ -63,3 +63,15 @@
 "account_guest_mode" = "Guest Mode";
 "account_sign_in" = "Sign In";
 "account_logout" = "Log Out";
+
+/* My Collections */
+"my_collections" = "My Collections";
+"samples" = "Samples";
+"login_for_collections" = "Sign in to access your collections";
+"no_collections" = "No collections found";
+"no_items" = "No items found";
+"loading_collections" = "Loading collections...";
+"items_count" = "%d items";
+"physical_size" = "Size: %@";
+"place_in_ar" = "Place in AR";
+"retry" = "Retry";
