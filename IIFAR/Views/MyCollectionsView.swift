@@ -123,7 +123,7 @@ private struct CollectionRow: View {
             Text(collection.displayName)
                 .font(.subheadline.bold())
                 .foregroundColor(.primary)
-            if let summary = collection.displaySummary {
+            if let summary = collection.summary {
                 Text(summary)
                     .font(.caption)
                     .foregroundColor(.secondary)

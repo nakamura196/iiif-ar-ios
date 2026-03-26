@@ -41,6 +41,19 @@
     <string>ARで床面を検出し、画像を配置するためにカメラを使用します。</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsLocalNetworking</key>
+        <true/>
+    </dict>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>開発中のサーバーに接続するためにローカルネットワークを使用します。</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_http._tcp</string>
+    </array>
+    <key>GIDClientID</key>
+    <string>610408930351-7c0i8f7rqb0gr638k0mtgn6spi2mgu8a.apps.googleusercontent.com</string>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>

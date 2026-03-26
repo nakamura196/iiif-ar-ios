@@ -1,48 +1,26 @@
 import Foundation
 
-// MARK: - Collection from Pocket API
+// MARK: - Collection (parsed from API response)
 
-struct PocketCollection: Identifiable, Codable {
+struct PocketCollection: Identifiable {
     let id: String
-    let label: [String: [String]]
-    let summary: [String: [String]]?
+    let label: String
+    let summary: String?
     let itemCount: Int?
 
-    var displayName: String {
-        label["ja"]?.first ?? label["en"]?.first ?? id
-    }
-
-    var displaySummary: String? {
-        summary?["ja"]?.first ?? summary?["en"]?.first
-    }
+    var displayName: String { label }
 }
 
-// MARK: - Item from collection
+// MARK: - Item (parsed from IIIF Collection items)
 
-struct PocketItem: Identifiable, Codable {
-    let id: String
-    let label: [String: [String]]
-    let thumbnail: [ThumbnailInfo]?
+struct PocketItem: Identifiable {
+    let id: String          // itemId
+    let manifestURL: String // full manifest URL
+    let label: String
+    let summary: String?
+    let thumbnailURL: String?
 
-    var displayName: String {
-        label["ja"]?.first ?? label["en"]?.first ?? id
-    }
-
-    /// URL for the first available thumbnail image.
-    var thumbnailURL: URL? {
-        guard let urlString = thumbnail?.first?.id else { return nil }
-        return URL(string: urlString)
-    }
-}
-
-// MARK: - Thumbnail metadata
-
-struct ThumbnailInfo: Codable {
-    let id: String
-    let type: String
-    let format: String?
-    let width: Int?
-    let height: Int?
+    var displayName: String { label }
 }
 
 // MARK: - Lightweight IIIF Manifest representation

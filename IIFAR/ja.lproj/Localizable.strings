@@ -75,3 +75,13 @@
 "physical_size" = "実寸: %@";
 "place_in_ar" = "ARで配置";
 "retry" = "再試行";
+
+/* Pocket API Errors */
+"pocket_error_not_authenticated" = "ログインしてください";
+"pocket_error_unauthorized" = "認証の有効期限が切れました。再ログインしてください";
+"pocket_error_forbidden" = "このコレクションへのアクセス権がありません";
+"pocket_error_not_found" = "コレクションまたはアイテムが見つかりません";
+"pocket_error_server" = "サーバーエラーが発生しました。しばらくしてからお試しください";
+"pocket_error_http" = "通信エラーが発生しました（コード: %d）";
+"pocket_error_decoding" = "データの読み込みに失敗しました";
+"pocket_error_network" = "ネットワークに接続できません。接続を確認してください";

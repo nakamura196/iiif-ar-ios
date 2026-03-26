@@ -67,7 +67,6 @@ struct CollectionItemsView: View {
             NavigationLink {
                 CollectionItemDetailView(
                     item: item,
-                    collectionId: collection.id,
                     arManager: arManager,
                     authManager: authManager,
                     isGalleryPresented: $isGalleryPresented
@@ -82,7 +81,11 @@ struct CollectionItemsView: View {
         isLoading = true
         errorMessage = nil
         do {
-            items = try await PocketAPIClient.shared.fetchItems(collectionId: collection.id)
+            let userId = authManager.user?.uid ?? ""
+            items = try await PocketAPIClient.shared.fetchItems(
+                collectionId: collection.id,
+                userId: userId
+            )
             await loadThumbnails()
         } catch {
             errorMessage = error.localizedDescription
@@ -94,7 +97,10 @@ struct CollectionItemsView: View {
         await withTaskGroup(of: (String, UIImage?).self) { group in
             for item in items {
                 group.addTask {
-                    guard let url = item.thumbnailURL else { return (item.id, nil) }
+                    guard let urlString = item.thumbnailURL,
+                          let url = URL(string: urlString) else {
+                        return (item.id, nil)
+                    }
                     do {
                         let (data, _) = try await URLSession.shared.data(from: url)
                         let image = UIImage(data: data)
@@ -141,12 +147,11 @@ private struct ItemRow: View {
                     .font(.subheadline.bold())
                     .foregroundColor(.primary)
                     .lineLimit(2)
-
-                if let thumb = item.thumbnail?.first,
-                   let w = thumb.width, let h = thumb.height {
-                    Text("\(w) x \(h) px")
-                        .font(.caption2)
+                if let summary = item.summary {
+                    Text(summary)
+                        .font(.caption)
                         .foregroundColor(.secondary)
+                        .lineLimit(2)
                 }
             }
         }
@@ -158,7 +163,6 @@ private struct ItemRow: View {
 
 struct CollectionItemDetailView: View {
     let item: PocketItem
-    let collectionId: String
     @ObservedObject var arManager: ARManager
     @ObservedObject var authManager: AuthManager
     @Binding var isGalleryPresented: Bool
@@ -182,6 +186,13 @@ struct CollectionItemDetailView: View {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     }
+                }
+
+                // Summary
+                if let summary = item.summary {
+                    Text(summary)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
                 }
 
                 // AR placement button
@@ -224,10 +235,7 @@ struct CollectionItemDetailView: View {
                         )
                         DetailInfoRow(
                             label: NSLocalizedString("label_real_size", comment: ""),
-                            value: String(
-                                format: NSLocalizedString("physical_size", comment: ""),
-                                formatSize(widthCm: manifest.realWidthCm, heightCm: manifest.realHeightCm)
-                            )
+                            value: formatSize(widthCm: manifest.realWidthCm, heightCm: manifest.realHeightCm)
                         )
                     }
                 }
@@ -242,7 +250,8 @@ struct CollectionItemDetailView: View {
     }
 
     private func loadThumbnail() async {
-        guard let url = item.thumbnailURL else {
+        guard let urlString = item.thumbnailURL,
+              let url = URL(string: urlString) else {
             isLoadingThumbnail = false
             return
         }
@@ -259,11 +268,8 @@ struct CollectionItemDetailView: View {
         isLoadingManifest = true
         errorMessage = nil
         do {
-            let userId = authManager.user?.uid ?? ""
             let fetchedManifest = try await PocketAPIClient.shared.fetchManifest(
-                userId: userId,
-                collectionId: collectionId,
-                itemId: item.id
+                manifestURL: item.manifestURL
             )
             manifest = fetchedManifest
 

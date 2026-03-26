@@ -75,3 +75,13 @@
 "physical_size" = "Size: %@";
 "place_in_ar" = "Place in AR";
 "retry" = "Retry";
+
+/* Pocket API Errors */
+"pocket_error_not_authenticated" = "Please sign in";
+"pocket_error_unauthorized" = "Session expired. Please sign in again";
+"pocket_error_forbidden" = "You don't have access to this collection";
+"pocket_error_not_found" = "Collection or item not found";
+"pocket_error_server" = "Server error. Please try again later";
+"pocket_error_http" = "Communication error (code: %d)";
+"pocket_error_decoding" = "Failed to load data";
+"pocket_error_network" = "No network connection. Please check your connection";

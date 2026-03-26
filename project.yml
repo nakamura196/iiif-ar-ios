@@ -6,11 +6,11 @@ options:
   xcodeVersion: "15.0"
 
 packages:
-  FirebaseAuth:
+  firebase-ios-sdk:
     url: https://github.com/firebase/firebase-ios-sdk
     from: "11.0.0"
-  GoogleSignIn:
-    url: https://github.com/google/GoogleSignInSwift
+  GoogleSignIn-iOS:
+    url: https://github.com/google/GoogleSignIn-iOS
     from: "8.0.0"
 
 settings:
@@ -24,17 +24,17 @@ targets:
     sources:
       - path: IIFAR
     dependencies:
-      - package: FirebaseAuth
+      - package: firebase-ios-sdk
         product: FirebaseAuth
-      - package: FirebaseAuth
+      - package: firebase-ios-sdk
         product: FirebaseCrashlytics
-      - package: FirebaseAuth
+      - package: firebase-ios-sdk
         product: FirebaseAnalytics
-      - package: FirebaseAuth
+      - package: firebase-ios-sdk
         product: FirebasePerformance
-      - package: GoogleSignIn
+      - package: GoogleSignIn-iOS
         product: GoogleSignIn
-      - package: GoogleSignIn
+      - package: GoogleSignIn-iOS
         product: GoogleSignInSwift
     settings:
       base:
