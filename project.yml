@@ -47,7 +47,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.nakamura196.iifar
         PRODUCT_NAME: "IIIF AR"
         MARKETING_VERSION: "1.1.0"
-        CURRENT_PROJECT_VERSION: "3"
+        CURRENT_PROJECT_VERSION: "4"
         DEVELOPMENT_TEAM: "Q6S8JS6GWV"
         CODE_SIGN_STYLE: "Automatic"
         TARGETED_DEVICE_FAMILY: "1,2"

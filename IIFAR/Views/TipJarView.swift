@@ -30,9 +30,17 @@ struct TipJarView: View {
                     }
                     .padding()
                 } else if manager.products.isEmpty {
-                    Text(String(localized: "tipjar_unavailable", defaultValue: "現在、商品を取得できません。"))
-                        .foregroundColor(.secondary)
-                        .font(.subheadline)
+                    VStack(spacing: 8) {
+                        Image(systemName: "cup.and.saucer")
+                            .font(.system(size: 32))
+                            .foregroundColor(.secondary)
+                        Text(String(localized: "tipjar_unavailable", defaultValue: "現在、応援機能を準備中です。しばらくしてからお試しください。"))
+                            .foregroundColor(.secondary)
+                            .font(.subheadline)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
                 } else {
                     ForEach(manager.products, id: \.id) { product in
                         tipRow(product: product)

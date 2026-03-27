@@ -20,13 +20,17 @@ class TipJarManager: ObservableObject {
         case error(String)
     }
 
+    @Published var loadError: String?
+
     func loadProducts() async {
         isLoading = true
+        loadError = nil
         do {
             let storeProducts = try await Product.products(for: Self.productIDs)
             products = storeProducts.sorted { $0.price < $1.price }
         } catch {
             products = []
+            // Don't show technical error - this is expected in review/sandbox
         }
         isLoading = false
     }
