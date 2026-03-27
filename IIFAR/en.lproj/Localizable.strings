@@ -94,3 +94,12 @@
 "label_real_size" = "Physical size";
 "label_pixels" = "Pixels";
 "detail_technical_info" = "Technical info";
+
+/* Account deletion */
+"sign_out" = "Sign Out";
+"delete_account" = "Delete Account";
+"delete_account_title" = "Delete Account";
+"delete_account_message" = "Deleting your account will remove all data associated with this app. This action cannot be undone.";
+"delete_account_confirm" = "Delete";
+"cancel" = "Cancel";
+"error" = "Error";

@@ -88,6 +88,14 @@ class AuthManager: ObservableObject {
         GIDSignIn.sharedInstance.signOut()
     }
 
+    // MARK: - Delete Account
+
+    func deleteAccount() async throws {
+        guard let user = Auth.auth().currentUser else { return }
+        try await user.delete()
+        GIDSignIn.sharedInstance.signOut()
+    }
+
     func getIdToken() async throws -> String? {
         return try await user?.getIDToken()
     }

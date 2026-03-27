@@ -5,6 +5,8 @@ struct SettingsView: View {
     @ObservedObject var authManager: AuthManager
     @Binding var isGuestMode: Bool
     @Binding var isPresented: Bool
+    @State private var showDeleteConfirmation = false
+    @State private var deleteError: String?
 
     var body: some View {
         NavigationStack {
@@ -45,7 +47,13 @@ struct SettingsView: View {
                         Button(role: .destructive) {
                             try? authManager.signOut()
                         } label: {
-                            Label("ログアウト", systemImage: "rectangle.portrait.and.arrow.right")
+                            Label(NSLocalizedString("sign_out", comment: ""), systemImage: "rectangle.portrait.and.arrow.right")
+                        }
+                        Button(role: .destructive) {
+                            showDeleteConfirmation = true
+                        } label: {
+                            Label(NSLocalizedString("delete_account", comment: ""), systemImage: "trash")
+                                .foregroundColor(.red)
                         }
                     }
                 } else if isGuestMode {
@@ -141,6 +149,28 @@ struct SettingsView: View {
                         isPresented = false
                     }
                 }
+            }
+            .alert(NSLocalizedString("delete_account_title", comment: ""), isPresented: $showDeleteConfirmation) {
+                Button(NSLocalizedString("cancel", comment: ""), role: .cancel) {}
+                Button(NSLocalizedString("delete_account_confirm", comment: ""), role: .destructive) {
+                    Task {
+                        do {
+                            try await authManager.deleteAccount()
+                        } catch {
+                            deleteError = error.localizedDescription
+                        }
+                    }
+                }
+            } message: {
+                Text(NSLocalizedString("delete_account_message", comment: ""))
+            }
+            .alert(NSLocalizedString("error", comment: ""), isPresented: .init(
+                get: { deleteError != nil },
+                set: { if !$0 { deleteError = nil } }
+            )) {
+                Button("OK") { deleteError = nil }
+            } message: {
+                Text(deleteError ?? "")
             }
         }
     }

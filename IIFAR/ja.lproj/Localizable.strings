@@ -94,3 +94,12 @@
 "label_real_size" = "実寸";
 "label_pixels" = "ピクセル";
 "detail_technical_info" = "技術情報";
+
+/* Account deletion */
+"sign_out" = "ログアウト";
+"delete_account" = "アカウントを削除";
+"delete_account_title" = "アカウントの削除";
+"delete_account_message" = "アカウントを削除すると、このアプリに関連するすべてのデータが削除されます。この操作は元に戻せません。";
+"delete_account_confirm" = "削除する";
+"cancel" = "キャンセル";
+"error" = "エラー";
