@@ -28,7 +28,7 @@ import urllib.error
 # --- Config ---
 BUNDLE_ID = "com.nakamura196.iifar"
 VERSION_STRING = "1.1.0"
-BUILD_NUMBER = "1"
+BUILD_NUMBER = "2"
 
 KEY_ID = os.environ.get("ASC_KEY_ID", "KD98P2SUZB")
 ISSUER_ID = os.environ.get("ASC_ISSUER_ID", "5726bd9c-7a3e-4ab8-b094-b5be612b291c")

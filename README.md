@@ -9,7 +9,7 @@ Detect a floor surface and place high-resolution historical maps and picture scr
 [BookSnake](https://apps.apple.com/us/app/booksnake/id6478938687) にインスパイアされたプロジェクトです。
 Inspired by [BookSnake](https://apps.apple.com/us/app/booksnake/id6478938687).
 
-[![App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple&logoColor=white)](#)
+[![App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple&logoColor=white)](https://apps.apple.com/app/iiif-ar/id6761031891)
 
 📖 **GitHub Pages:** https://nakamura196.github.io/iiif-ar-ios/
 
