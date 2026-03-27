@@ -15,6 +15,7 @@ analytics/
 # API Keys
 *.p8
 .env
+GoogleService-Info.plist
 
 # macOS
 .DS_Store

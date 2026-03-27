@@ -27,7 +27,7 @@ import urllib.error
 
 # --- Config ---
 BUNDLE_ID = "com.nakamura196.iifar"
-VERSION_STRING = "1.0.1"
+VERSION_STRING = "1.1.0"
 BUILD_NUMBER = "1"
 
 KEY_ID = os.environ.get("ASC_KEY_ID", "KD98P2SUZB")
@@ -35,8 +35,8 @@ ISSUER_ID = os.environ.get("ASC_ISSUER_ID", "5726bd9c-7a3e-4ab8-b094-b5be612b291
 KEY_PATH = os.path.expanduser(f"~/.private_keys/AuthKey_{KEY_ID}.p8")
 
 WHATS_NEW = {
-    "ja": "- アプリアイコンを更新しました",
-    "en-US": "- Updated app icon",
+    "ja": "- Googleアカウント・Appleアカウントでログインし、自分のIIIFコレクションをAR表示できるようになりました\n- 画像コレクション管理ツール「Pocket」との連携\n- メタデータ表示（所蔵、製作年、法量、帰属、ライセンス）\n- 実寸情報（physicalScale）の表示に対応\n- アプリの安定性とパフォーマンスを改善",
+    "en-US": "- Sign in with Google or Apple to view your own IIIF collections in AR\n- Integration with Pocket image collection management tool\n- Display metadata (institution, date, dimensions, attribution, license)\n- Support for physical dimensions (physicalScale)\n- Improved app stability and performance",
 }
 
 # --- JWT ---
