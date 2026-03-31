@@ -92,6 +92,7 @@ struct SettingsView: View {
                     }
                 }
 
+                #if DEBUG
                 Section("デバッグ") {
                     Toggle("コーナーポール", isOn: $arManager.showCornerPoles)
                     if arManager.showCornerPoles {
@@ -110,6 +111,16 @@ struct SettingsView: View {
 
                     Toggle("床面検出の可視化", isOn: $arManager.showPlaneDetection)
                     Toggle("画像情報の表示", isOn: $arManager.showImageInfo)
+                }
+                #endif
+
+                Section("床") {
+                    Picker("床の種類", selection: $arManager.floorType) {
+                        ForEach(ARManager.FloorType.allCases, id: \.self) { type in
+                            Text(type.rawValue).tag(type)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                 }
 
                 if let sample = arManager.currentSample {
@@ -137,9 +148,10 @@ struct SettingsView: View {
                     } label: {
                         Label("応援する", systemImage: "heart.fill")
                     }
-                    LabeledContent("バージョン", value: "1.0.0")
+                    LabeledContent("バージョン", value: "1.2.0")
                     LabeledContent("IIIF API", value: "Image API 2.0")
                 }
+
             }
             .navigationTitle("設定")
             .navigationBarTitleDisplayMode(.inline)

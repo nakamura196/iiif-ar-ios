@@ -22,6 +22,11 @@ class ARManager: ObservableObject {
     #endif
     @Published var poleHeight: Double = 1.0
     @Published var imageRotation: Double = 0
+    enum FloorType: String, CaseIterable {
+        case none    = "なし"
+        case tatami  = "畳"
+    }
+    @Published var floorType: FloorType = .tatami { didSet { onDebugSettingsChanged?() } }
 
     // Tile debug info
     @Published var currentZoomLevel: Int = 0

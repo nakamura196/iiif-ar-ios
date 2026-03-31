@@ -83,6 +83,7 @@ struct ARViewContainer: UIViewRepresentable {
         private var previewAnchor: AnchorEntity?
         private var previewCorners: [ModelEntity] = []
         private var previewEdges: [ModelEntity] = []
+        private var tatamiEntities: [Entity] = []
 
         init(arManager: ARManager) {
             self.arManager = arManager
@@ -430,9 +431,58 @@ struct ARViewContainer: UIViewRepresentable {
                 )
             }
 
+            // Place tatami mat under the image (if enabled)
+            if arManager.floorType == .tatami {
+                placeTatami(under: parent, width: width, depth: depth)
+            }
+
             haptic(.medium)
 
             arManager.isPlaced = true
+        }
+
+        // Each tatami unit = 2 mats in a square (1.82m × 1.82m), using extracted texture
+        private let tatamiUnitSize: Float = 1.82
+
+        @MainActor
+        private func placeTatami(under parent: Entity, width: Float, depth: Float) {
+            // Load tatami texture (extracted from SM_tatami.glb base color)
+            guard let texURL = Bundle.main.url(forResource: "tatami_texture", withExtension: "png"),
+                  let uiImage = UIImage(contentsOfFile: texURL.path),
+                  let cgImage = uiImage.cgImage else {
+                print("[Ezu] tatami_texture.png not found"); return
+            }
+            guard let texture = try? TextureResource.generate(from: cgImage, options: .init(semantic: .color)) else {
+                print("[Ezu] Failed to generate tatami texture"); return
+            }
+
+            var material = UnlitMaterial()
+            material.color = .init(tint: .white, texture: .init(texture))
+
+            // Grid: cover ≈ 2× image area (each dimension × √2)
+            let cols = max(1, Int(ceil(width * 1.415 / tatamiUnitSize)))
+            let rows = max(1, Int(ceil(depth * 1.415 / tatamiUnitSize)))
+            print("[Ezu] tatami \(cols)×\(rows) units, covers \(Float(cols)*tatamiUnitSize)m × \(Float(rows)*tatamiUnitSize)m")
+
+            let gridW = Float(cols) * tatamiUnitSize
+            let gridD = Float(rows) * tatamiUnitSize
+
+            for row in 0..<rows {
+                for col in 0..<cols {
+                    let mesh = MeshResource.generatePlane(width: tatamiUnitSize, depth: tatamiUnitSize)
+                    let mat = ModelEntity(mesh: mesh, materials: [material])
+                    let cellX = -gridW / 2 + tatamiUnitSize * (Float(col) + 0.5)
+                    let cellZ = -gridD / 2 + tatamiUnitSize * (Float(row) + 0.5)
+                    mat.position = SIMD3<Float>(cellX, -0.001, cellZ)
+                    parent.addChild(mat)
+                    tatamiEntities.append(mat)
+                }
+            }
+        }
+
+        private func removeTatami() {
+            for e in tatamiEntities { e.removeFromParent() }
+            tatamiEntities.removeAll()
         }
 
         private func createCornerPoles(width: Float, depth: Float, height: Float) -> [ModelEntity] {
@@ -576,6 +626,16 @@ struct ARViewContainer: UIViewRepresentable {
                 edgeEntities = []
             }
 
+            // Tatami visibility
+            let tatamiParent: Entity? = contentContainer ?? imageAnchor
+            if arManager.floorType == .tatami {
+                if tatamiEntities.isEmpty, let tatamiParent {
+                    placeTatami(under: tatamiParent, width: currentWidth, depth: currentDepth)
+                }
+            } else {
+                removeTatami()
+            }
+
             // Plane detection visibility
             if arManager.showPlaneDetection && !arManager.isPlaced {
                 showCustomPlanes = true
@@ -604,6 +664,7 @@ struct ARViewContainer: UIViewRepresentable {
                     poleEntities = []
                     edgeEntities = []
                     cachedTexture = nil
+                    tatamiEntities.removeAll()
                 }
                 restoreCustomPlanes()
             }
