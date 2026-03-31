@@ -24,8 +24,6 @@
         <string>LaunchBackground</string>
         <key>UIImageName</key>
         <string>LaunchIcon</string>
-        <key>UIImageRespectsSafeAreaInsets</key>
-        <true/>
     </dict>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
