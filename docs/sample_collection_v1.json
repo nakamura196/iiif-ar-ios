@@ -1,6 +1,6 @@
 {
   "@context": "http://iiif.io/api/presentation/3/context.json",
-  "id": "https://nakamura196.github.io/iiif-ar-ios/sample_collection.json",
+  "id": "https://ar.ldas.jp/sample_collection.json",
   "type": "Collection",
   "label": { "ja": ["IIIF AR サンプルコレクション（参考用・2次利用不可のものを含む）"] },
   "items": [

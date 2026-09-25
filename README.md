@@ -11,7 +11,7 @@ Inspired by [BookSnake](https://apps.apple.com/us/app/booksnake/id6478938687).
 
 [![App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple&logoColor=white)](https://apps.apple.com/app/iiif-ar/id6761031891)
 
-📖 **GitHub Pages:** https://nakamura196.github.io/iiif-ar-ios/
+📖 **GitHub Pages:** https://ar.ldas.jp/
 
 ## 機能 / Features
 
@@ -110,3 +110,13 @@ xcodebuild build \
 
 このプロジェクトは [MIT License](LICENSE) のもとで公開されています。
 This project is released under the [MIT License](LICENSE).
+
+## Site tests
+
+The introduction page and privacy policy are served as-is from `docs/` by GitHub Pages at <https://ar.ldas.jp> (custom domain via `docs/CNAME`).
+No dependencies are needed.
+
+```
+npm test          # public URL settings + every in-site reference resolves to a file in docs/
+npm run test:live # after deploy: new host, assets, 404, and old github.io URLs redirect with path/query kept
+```
