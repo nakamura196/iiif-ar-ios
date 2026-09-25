@@ -104,13 +104,13 @@ https://github.com/nakamura196/iiif-ar-ios/issues
 ## マーケティングURL（アプリ紹介ページ）
 
 ```
-https://nakamura196.github.io/iiif-ar-ios/
+https://ar.ldas.jp/
 ```
 
 ## プライバシーポリシーURL
 
 ```
-https://nakamura196.github.io/iiif-ar-ios/privacy.html
+https://ar.ldas.jp/privacy.html
 ```
 
 ## App Store URL
